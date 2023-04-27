@@ -28,7 +28,7 @@ def parse_solr_results(solr_results):
                 url = result['url']
             if 'content' in result:
                 content = result['content']
-                meta_info = content
+                meta_info = content[:200]
                 meta_info = meta_info.replace("\n", " ")
                 meta_info = " ".join(re.findall("[a-zA-Z]+", meta_info))
             link_json = {
