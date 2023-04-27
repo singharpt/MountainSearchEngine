@@ -1,7 +1,7 @@
 import math
 from flask import Flask, render_template, url_for, request
-# import bingquery as bing_call
-# import googlequery as google_call
+import bingquery as bing_call
+import googlequery as google_call
 
 # from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 # import math
@@ -14,6 +14,7 @@ from flask import Flask, render_template, url_for, request
 # from sknetwork.ranking import PageRank
 # import pandas as pd
 import json
+
 # import ast
 # from bs4 import BeautifulSoup
 
@@ -26,81 +27,81 @@ title_link_dict = {}
 
 app = Flask(__name__)
 QR = {}
+
+
 @app.route('/', methods=['GET', 'POST'])
-
 def index():
-  rel_docs = False
-  Query_Results = False
-  Relevance_Results = False
-  Cluster_Results = False
-  Query_Expansion_Results = False
+    rel_docs = False
+    Query_Results = False
+    Relevance_Results = False
+    Cluster_Results = False
+    Query_Expansion_Results = False
 
-  if request.method == 'POST':
-    data = json.dumps(dict(request.form))
-    print(data)
-    print(type(data))
-    form_data= json.loads(data)
-    # print(data)
-    inner_data = form_data['query']
-    # print(inner_data)
-    # print(type(inner_data))
-    btn = form_data['search']
+    if request.method == 'POST':
+        data = json.dumps(dict(request.form))
+        print(data)
+        print(type(data))
+        form_data = json.loads(data)
+        # print(data)
+        inner_data = form_data['query']
+        # print(inner_data)
+        # print(type(inner_data))
+        btn = form_data['search']
 
-    if btn=="Search(Relevance)":
-      qry = open("query.txt", "w")
-      qry.write(inner_data)
-      qry.close()
-      print("Search(Relevance)")
-      # Relevance_Results = relevance_results('query.txt')
-      # Query_Results = Google_Bing_Results(inner_data)
-      Relevance_Results = ["relevance_results('query.txt')"]
-      Query_Results = ["Google_Bing_Results(inner_data)"]
+        if btn == "Search(Relevance)":
+            qry = open("query.txt", "w")
+            qry.write(inner_data)
+            qry.close()
+            print("Search(Relevance)")
+            # Relevance_Results = relevance_results('query.txt')
+            Query_Results = Google_Bing_Results(inner_data)
+            Relevance_Results = ["relevance_results('query.txt')"]
 
-    if btn=="Search(Link Analysis)":
-      qry = open("query.txt", "w")
-      qry.write(inner_data)
-      qry.close()
-      # Relevance_Results = relevance_results('query.txt')
-      # Query_Results = Google_Bing_Results(inner_data)
-      Relevance_Results = ["relevance_results('query.txt')"]
-      Query_Results = ["Google_Bing_Results(inner_data)"]
-      print("Search(Link Analysis)")
+        if btn == "Search(Link Analysis)":
+            qry = open("query.txt", "w")
+            qry.write(inner_data)
+            qry.close()
+            # Relevance_Results = relevance_results('query.txt')
+            Query_Results = Google_Bing_Results(inner_data)
+            Relevance_Results = ["relevance_results('query.txt')"]
+            print("Search(Link Analysis)")
 
-    if btn=="Search(Clustering)":
-      qry = open("query.txt", "w")
-      qry.write(inner_data)
-      qry.close()
-      # Relevance_Results, Cluster_Results = cluster_results('query.txt')
-      Relevance_Results = ['Test1']
-      Cluster_Results = ['Test3']
-      Query_Results = ["Google_Bing_Results(inner_data)"]
-      # Query_Results = Google_Bing_Results(inner_data)
-      print("Search(Clustering)")
+        if btn == "Search(Clustering)":
+            qry = open("query.txt", "w")
+            qry.write(inner_data)
+            qry.close()
+            # Relevance_Results, Cluster_Results = cluster_results('query.txt')
+            Relevance_Results = ['Test1']
+            Cluster_Results = ['Test3']
+            Query_Results = Google_Bing_Results(inner_data)
+            print("Search(Clustering)")
 
-    if btn=="Search(QueryExpansion)":
-      Relevance_Results = ['Test1']
-      Query_Expansion_Results = ['Test4']
-      # Query_Results = Google_Bing_Results(inner_data)
-      print("Search(QueryExpansion)")
+        if btn == "Search(QueryExpansion)":
+            Relevance_Results = ['Test1']
+            Query_Expansion_Results = ['Test4']
+            Query_Results = Google_Bing_Results(inner_data)
+            print("Search(QueryExpansion)")
 
-    if btn=="Back":
-      Query_Results = False
-      Relevance_Results = False
-      Cluster_Results = False
-      Query_Expansion_Results = False
+        if btn == "Back":
+            Query_Results = False
+            Relevance_Results = False
+            Cluster_Results = False
+            Query_Expansion_Results = False
 
-    # Query_Results = Google_Bing_Results(inner_data)
-    
-    QR = Query_Results
-  # return render_template('ir.html', Query_Results=Query_Results, Relevance_Results = Relevance_Results, Cluster_Results = Cluster_Results, Query_Expansion_Results = Query_Expansion_Results)
-  return render_template('ir.html', Query_Results=Query_Results, Relevance_Results = Relevance_Results)
+        # Query_Results = Google_Bing_Results(inner_data)
+
+        QR = Query_Results
+    # return render_template('ir.html', Query_Results=Query_Results, Relevance_Results = Relevance_Results, Cluster_Results = Cluster_Results, Query_Expansion_Results = Query_Expansion_Results)
+    return render_template('ir.html', Query_Results=Query_Results, Relevance_Results=Relevance_Results)
+
 
 def get_title_link(results):
-  res = []
-  for doc in results:
-    temp_list = [title_link_dict[doc][0], title_link_dict[doc][1]]
-    res.append(temp_list)
-  return res
+    res = []
+    for doc in results:
+        temp_list = [title_link_dict[doc][0], title_link_dict[doc][1]]
+        res.append(temp_list)
+    return res
+
 
 def Google_Bing_Results(search_query):
     query_result_dict = {}
@@ -126,6 +127,7 @@ def Google_Bing_Results(search_query):
 
     return query_result_dict
 
+
 # st ='The University of Texas at Dallas'
 # q_dict = Google_Bing_Results(st)
 
@@ -143,41 +145,41 @@ def Google_Bing_Results(search_query):
 #     print("Snippet:", q_dict['bing'][i][2])
 
 def relevance_results(query_file):
-  r_results = []
-  results = relevance.Indexing(query_file)
-  # print(results)
-  # for doc in results:
-  #   temp_list = [title_link_dict[doc][0], title_link_dict[doc][1]]
-  #   r_results.append(temp_list)
-  r_results = get_title_link(results)
-  # print(r_results)
-  return r_results
+    r_results = []
+    results = relevance.Indexing(query_file)
+    # print(results)
+    # for doc in results:
+    #   temp_list = [title_link_dict[doc][0], title_link_dict[doc][1]]
+    #   r_results.append(temp_list)
+    r_results = get_title_link(results)
+    # print(r_results)
+    return r_results
+
 
 def cluster_results(query_file):
-  c_results = {}
-  c_results_list = []
-  r_results = []
-  results = relevance.Indexing(query_file)
-  r_results = get_title_link(results)
-  c_results = cr.fetch_topm_docs(results)
-  for key,value in c_results.items():
-    c_results_list.append(get_title_link(value))
+    c_results = {}
+    c_results_list = []
+    r_results = []
+    results = relevance.Indexing(query_file)
+    r_results = get_title_link(results)
+    c_results = cr.fetch_topm_docs(results)
+    for key, value in c_results.items():
+        c_results_list.append(get_title_link(value))
 
-  # for doc in results:
-  #   temp_list = [title_link_dict[doc][0], title_link_dict[doc][1]]
-  #   r_results.append(temp_list)
-  print(results)
-  print(r_results)
-  print(c_results)
+    # for doc in results:
+    #   temp_list = [title_link_dict[doc][0], title_link_dict[doc][1]]
+    #   r_results.append(temp_list)
+    print(results)
+    print(r_results)
+    print(c_results)
 
-  return r_results, c_results_list
+    return r_results, c_results_list
+
 
 # relevance_results('query.txt')
 # cluster_results('query.txt')
 
 
-
 if __name__ == "__main__":
-  app.run(debug=True)
+    app.run(debug=True)
 
-    

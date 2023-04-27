@@ -40,9 +40,10 @@ def parse_solr_results(solr_results):
             api_resp.append(link_json)
     return api_resp
 
-# solr_results = get_results_from_solr("text:(+mountain)", 10)
+solr_results = get_results_from_solr("text:(+mountain)", 10)
 
-# result = parse_solr_results(solr_results)
+result = parse_solr_results(solr_results)
 
-# for r in result:
-#     print(r["content"], "\n\n")
+for r in result:
+    # print(r["content"], "\n\n")
+    print(r, "\n\n")
