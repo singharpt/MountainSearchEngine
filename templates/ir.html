@@ -11,27 +11,35 @@
 
   
     <style>
-      
-        body{
-            background-color: lightblue; 
-        }  
+      body, html {
+        height: 100%;
+        margin: 0;
+          background-image: url("https://external-preview.redd.it/o3CDGaSels7hbsplZv10GgXGsdf-mRXUQRZa9jfi1cs.jpg?auto=webp&s=5335395ea29d5f3aab7422b496edd59dd6a3348c");
+          /* Full height */
+          height: 100%;
+          /* Center and scale the image */
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-attachment: fixed;
+      }
 
-        .container {
+      .container {
             /* background-color: beige; */
             height: 100vh;
             width: 100vw;
             display: flex;
             flex-direction: column;
-        }
+      }
   
   
-        #search-engine {
-            padding: 10px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: row;
-            /* border: solid 1px green */
-        }
+      #search-engine {
+          padding: 10px;
+          flex-grow: 1;
+          display: flex;
+          flex-direction: row;
+          /* border: solid 1px green */
+      }
   
         #research-div {
 
@@ -39,7 +47,7 @@
             background-color: white;
             overflow-y: scroll; 
             flex-grow: 2; 
-            height: 70%;
+            height: 55%;
             /* border: solid 1px black; */
             padding: 20px;
             margin-top: 20px;
@@ -76,34 +84,89 @@
             /* border: solid 1px black; */
             border-radius: 25px;
         }
-  
+
+        .searchbutton:hover{
+            background: white;
+            color: #0262FF;
+            {#border: 2px solid #4CAF50;#}
+            border: 2px solid #0262FF;
+        }
+        .searchbutton{
+            background: #0262FF;
+            color: white;
+        }
+
     </style>
 </head>
   
 <body>
+<div class="bg">
+
     <div class="container">
         <!-- <div id="box1"> -->
-            <h3 style=" margin-left: 340px; padding: 10px;">CS 6322 Information Retrieval Project (Team 8)  </h3>
+            <h3 style=" margin-left: 250px; padding: 10px;">CS 6322 Information Retrieval - Mountain Search Engine (Team 11)  </h3>
  
             <form action="{{ url_for('index') }}" method="POST" style="margin-left: 5px; padding: 20px; ">
-                <input style="width: 500px; border-radius: 10px; height: 40px; padding: 5px; padding-top: 5px;" type="text" name="query" placeholder="Enter your search query here">
-                <input style="width: 150px; border-radius: 10px; height: 40px; background-color:#fafafa; " type="submit" name="search" value="Search(Relevance)">
-                <input style="width: 170px; border-radius: 10px; height: 40px; background-color:#fafafa; " type="submit" name="search" value="Search(Link Analysis)">
-                <input style="width: 150px; border-radius: 10px; height: 40px; background-color:#fafafa; " type="submit" name="search" value="Search(Clustering)">
-                <!-- <label for="clustering">Cluster:</label>
-                <select name="cluster" id="cluster">
-                <option value="kmeans">KMeans</option>
-                <option value="aglo">Algomerrative</option>
-                </select> -->
-                <input style="width: 200px; border-radius: 10px; height: 40px; background-color:#fafafa; " type="submit" name="search" value="Search(QueryExpansion)">
-                <input style=" width: 50px; border-radius: 10px; height: 40px; background-color:#fafafa; " type="submit" name="search" value="Back">
+                <div>
+                    <div id="search-box" style="margin-bottom: 20px; display: flex; justify-content: center">
+                        <input style="width: 500px; border-radius: 5px; border: none; height: 40px; padding: 5px; text-align: center;" type="text" name="query" placeholder="Enter your search query here">
+                    </div>
+                    <div id="search-options" style="margin-bottom: 20px; display: flex; justify-content: center">
+                        <input class="searchbutton" style="width: 190px; border-radius: 10px; border: none ;height: 40px; margin: 5px;" type="submit" name="search" value="Vector Space Relevance">
+                        <input class="searchbutton" style="width: 190px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="PageRanking + HITS">
+{#                        <input style="width: 170px; border-radius: 10px; height: 40px; background-color:#fafafa; " type="submit" name="search" value="Search(Link Analysis)">#}
+                        <input class="searchbutton" style="width: 150px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Flat Clustering">
+                        <input class="searchbutton" style="width: 200px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Agglomerative Clustering">
+
+                        <!-- <label for="clustering">Cluster:</label>
+                        <select name="cluster" id="cluster">
+                        <option value="kmeans">KMeans</option>
+                        <option value="aglo">Algomerrative</option>
+                        </select> -->
+                        <input class="searchbutton" style="width: 150px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Query Expansion">
+                        <input class="searchbutton" style=" width: 50px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Reset">
+                    </div>
+                </div>
             </form>
         <!-- </div> -->
         {% if Query_Results %}
         <div id="search-engine" >
+                   <div id = "right-div" class="col-md-6">
+                <!-- {% if Query_Results %} -->
+
+                <div id="bing-div">
+                   <h4>Bing</h4>
+                    <!-- <p>Google = {{Query_Results['google']}} </p> -->
+                    {% for res in Query_Results['bing'] %}
+                    <br><a href="{{res[0]}}">{{res[0]}}</a>
+                    <p style="padding:0%; margin: 0%; font-size: smaller; color: green;">{{res[1]}}</p>
+                    <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[2]}}</p>
+                    <!-- <p>Link = {{res[0]}} </p>
+                    <p>Display Link = {{res[1]}} </p>
+                    <p>Snippet = {{res[2]}} </p> -->
+
+                    {% endfor %}
+                </div>
+                    <div id="google-div">
+                    <h4>Google</h4>
+                    <!-- <img src="templates/Google-logo.png"/> -->
+                    <!-- <div class="image-box" style="background-image: url(templates/Google-logo.png)"></div> -->
+                    <!-- <p>Google = {{Query_Results['google']}} </p> -->
+                    {% for res in Query_Results['google'] %}
+                    <!-- <p>Link = {{res[0]}} </p>
+                    <p>Display Link = {{res[1]}} </p>
+                    <p>Snippet = {{res[2]}} </p> -->
+                    <br><a href="{{res[0]}}">{{res[0]}}</a>
+                    <p style="padding:0%; margin: 0%; font-size: smaller; color: green;">{{res[1]}}</p>
+                    <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[2]}}</p>
+
+                    {% endfor %}
+                </div>
+                <!-- {% endif %} -->
+            </div>
             <div id="research-div" class="col-md-6">
                 <!-- GeeksforGeeks 4 -->
-                <h4>Search Engine for Research Papers</h4>
+                <h4>Our Search Engine</h4>
                 <!-- <form action="/forward/" method="post">
                     <button name="forwardBtn" type="submit">Forward</button>
                 </form> -->
@@ -118,11 +181,17 @@
                     {% endfor %} -->
 <!--                    ******************** change the range. VVVVV imp-->
 
-                    {% for n in range(1) %}
+                    {% for dict in Relevance_Results %}
                     <br>
-                    <!-- <h6>Relevant document {{n+1}}</h6> -->
-                    <br><a href="{{Relevance_Results[n][0]}}">{{Relevance_Results[n][0]}}</a>
-                    <p style="padding:0%; margin: 0%; font-size: smaller;">{{Relevance_Results[n][1]}}</p>
+{#                    <!-- <h6>Relevant document {{n+1}}</h6> -->#}
+                    <br>
+{#                        <a href="{{Relevance_Results[n]["url"]}}">{{Relevance_Results[n]["url"]}}</a>#}
+{#                        <p style="padding:0%; margin: 0%; font-size: smaller;">{{Relevance_Results[n]["title"]}}</p>#}
+{#                        <p style="padding:0%; margin: 0%; font-size: smaller;">{{Relevance_Results[n]["content"]}}</p>#}
+                         <a href="{{dict["url"]}}">{{dict["url"]}}</a>
+                        <p style="padding:0%; margin: 0%; font-size: smaller; color: green">{{dict["title"]}}</p>
+                        <p style="padding:0%; margin: 0%; font-size: smaller;">{{dict["content"]}}</p>
+{#                        <p>{{ Relevance_Results }}</p>#}
                     
                     {% if Cluster_Results %}
                     <div>
@@ -178,41 +247,11 @@
 
 
             </div>
-            <div id = "right-div" class="col-md-6">
-                <!-- {% if Query_Results %} -->
-                <div id="google-div">
-                    <h4>Google</h4>
-                    <!-- <img src="templates/Google-logo.png"/> -->
-                    <!-- <div class="image-box" style="background-image: url(templates/Google-logo.png)"></div> -->
-                    <!-- <p>Google = {{Query_Results['google']}} </p> -->
-                    {% for res in Query_Results['google'] %}
-                    <!-- <p>Link = {{res[0]}} </p>
-                    <p>Display Link = {{res[1]}} </p>
-                    <p>Snippet = {{res[2]}} </p> -->
-                    <br><a href="{{res[0]}}">{{res[0]}}</a>
-                    <p style="padding:0%; margin: 0%; font-size: smaller; color: green;">{{res[1]}}</p>
-                    <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[2]}}</p>
-                    
-                    {% endfor %}
-                </div>
-                <div id="bing-div">
-                   <h4>Bing</h4>
-                    <!-- <p>Google = {{Query_Results['google']}} </p> -->
-                    {% for res in Query_Results['bing'] %}
-                    <br><a href="{{res[0]}}">{{res[0]}}</a>
-                    <p style="padding:0%; margin: 0%; font-size: smaller; color: green;">{{res[1]}}</p>
-                    <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[2]}}</p>
-                    <!-- <p>Link = {{res[0]}} </p>
-                    <p>Display Link = {{res[1]}} </p>
-                    <p>Snippet = {{res[2]}} </p> -->
-                    
-                    {% endfor %}
-                </div>
-                <!-- {% endif %} -->
-            </div>
+
         </div>
         {% endif %}
     </div>
+</div>
 </body>
   
 </html>

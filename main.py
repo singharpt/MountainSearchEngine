@@ -2,7 +2,8 @@ import math
 from flask import Flask, render_template, url_for, request
 import bingquery as bing_call
 import googlequery as google_call
-
+# from getSolrData import *
+import getSolrData
 # from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 # import math
 # from sklearn.metrics.pairwise import cosine_similarity
@@ -44,29 +45,35 @@ def index():
         form_data = json.loads(data)
         # print(data)
         inner_data = form_data['query']
-        # print(inner_data)
-        # print(type(inner_data))
         btn = form_data['search']
+        qry = open("query.txt", "w")
 
-        if btn == "Search(Relevance)":
+
+        if btn == "Vector Space Relevance":
             qry = open("query.txt", "w")
             qry.write(inner_data)
             qry.close()
-            print("Search(Relevance)")
-            # Relevance_Results = relevance_results('query.txt')
-            Query_Results = Google_Bing_Results(inner_data)
-            Relevance_Results = ["relevance_results('query.txt')"]
+            print("Button pressed: Vector Space Relevance")
 
-        if btn == "Search(Link Analysis)":
+            qry_param = "text:(+%s)" % (inner_data)
+            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
+            result = getSolrData.parse_solr_results(solr_results)
+
+            Relevance_Results = result
+            # Relevance_Results = "Button pressed: Vector Space Relevance"
+            Query_Results = Google_Bing_Results(inner_data)
+            # Relevance_Results = ["relevance_results('query.txt')"]
+
+        if btn == "PageRanking + HITS":
             qry = open("query.txt", "w")
             qry.write(inner_data)
             qry.close()
             # Relevance_Results = relevance_results('query.txt')
             Query_Results = Google_Bing_Results(inner_data)
             Relevance_Results = ["relevance_results('query.txt')"]
-            print("Search(Link Analysis)")
+            print("Button pressed: PageRanking + HITS")
 
-        if btn == "Search(Clustering)":
+        if btn == "Flat Clustering":
             qry = open("query.txt", "w")
             qry.write(inner_data)
             qry.close()
@@ -74,25 +81,30 @@ def index():
             Relevance_Results = ['Test1']
             Cluster_Results = ['Test3']
             Query_Results = Google_Bing_Results(inner_data)
-            print("Search(Clustering)")
+            print("Button pressed: Flat Clustering")
 
-        if btn == "Search(QueryExpansion)":
+        if btn == "Agglomerative Clustering":
+            qry = open("query.txt", "w")
+            qry.write(inner_data)
+            qry.close()
+            # Relevance_Results, Cluster_Results = cluster_results('query.txt')
             Relevance_Results = ['Test1']
-            Query_Expansion_Results = ['Test4']
+            Cluster_Results = ['Test3']
             Query_Results = Google_Bing_Results(inner_data)
-            print("Search(QueryExpansion)")
+            print("Button pressed: Agglomerative Clustering")
 
-        if btn == "Back":
+        if btn == "Query Expansion":
+            Relevance_Results = ['Test1']
+            Query_Results = Google_Bing_Results(inner_data)
+            print("Button pressed: Query Expansion")
+
+        if btn == "Reset":
             Query_Results = False
             Relevance_Results = False
             Cluster_Results = False
             Query_Expansion_Results = False
 
-        # Query_Results = Google_Bing_Results(inner_data)
-
-        QR = Query_Results
-    # return render_template('ir.html', Query_Results=Query_Results, Relevance_Results = Relevance_Results, Cluster_Results = Cluster_Results, Query_Expansion_Results = Query_Expansion_Results)
-    return render_template('ir.html', Query_Results=Query_Results, Relevance_Results=Relevance_Results)
+    return render_template('ir.html', Query_Results=Query_Results, Relevance_Results=Relevance_Results, Cluster_Results=False)
 
 
 def get_title_link(results):
