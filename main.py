@@ -4,6 +4,7 @@ import bingquery as bing_call
 import googlequery as google_call
 # from getSolrData import *
 import getSolrData
+import clustering
 # from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 # import math
 # from sklearn.metrics.pairwise import cosine_similarity
@@ -77,9 +78,15 @@ def index():
             qry = open("query.txt", "w")
             qry.write(inner_data)
             qry.close()
+            qry_param = "text:(+%s)" % (inner_data)
+            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
+            result = getSolrData.parse_solr_results(solr_results)
+
+            # Relevance_Results = clustering.get_clustering_results(result, btn)
+            Cluster_Results = clustering.get_clustering_results(result, btn)
             # Relevance_Results, Cluster_Results = cluster_results('query.txt')
-            Relevance_Results = ['Test1']
-            Cluster_Results = ['Test3']
+            # Relevance_Results = ['Test1']
+            
             Query_Results = Google_Bing_Results(inner_data)
             print("Button pressed: Flat Clustering")
 
@@ -88,8 +95,12 @@ def index():
             qry.write(inner_data)
             qry.close()
             # Relevance_Results, Cluster_Results = cluster_results('query.txt')
-            Relevance_Results = ['Test1']
-            Cluster_Results = ['Test3']
+            qry_param = "text:(+%s)" % (inner_data)
+            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
+            result = getSolrData.parse_solr_results(solr_results)
+
+            # Relevance_Results = clustering.get_clustering_results(result, btn)
+            Cluster_Results = clustering.get_clustering_results(result, btn)
             Query_Results = Google_Bing_Results(inner_data)
             print("Button pressed: Agglomerative Clustering")
 
