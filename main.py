@@ -216,7 +216,6 @@ def cluster_results(query_file):
 # relevance_results('query.txt')
 # cluster_results('query.txt')
 
-
 if __name__ == "__main__":
     app.run(debug=True)
 
