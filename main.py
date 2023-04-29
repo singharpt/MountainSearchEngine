@@ -82,15 +82,15 @@ def index():
             solr_results = getSolrData.get_results_from_solr(qry_param, 10)
             result = getSolrData.parse_solr_results(solr_results)
 
-            # Relevance_Results = clustering.get_clustering_results(result, btn)
-            Cluster_Results = clustering.get_clustering_results(result, btn)
+            Relevance_Results = clustering.get_clustering_results(result, btn)
+            # Cluster_Results = clustering.get_clustering_results(result, btn)
             # Relevance_Results, Cluster_Results = cluster_results('query.txt')
             # Relevance_Results = ['Test1']
             
             Query_Results = Google_Bing_Results(inner_data)
             print("Button pressed: Flat Clustering")
 
-        if btn == "Agglomerative Clustering":
+        if btn == "Single-link Agglomerative Clustering":
             qry = open("query.txt", "w")
             qry.write(inner_data)
             qry.close()
@@ -99,8 +99,22 @@ def index():
             solr_results = getSolrData.get_results_from_solr(qry_param, 10)
             result = getSolrData.parse_solr_results(solr_results)
 
-            # Relevance_Results = clustering.get_clustering_results(result, btn)
-            Cluster_Results = clustering.get_clustering_results(result, btn)
+            Relevance_Results = clustering.get_clustering_results(result, btn)
+            # Cluster_Results = clustering.get_clustering_results(result, btn)
+            Query_Results = Google_Bing_Results(inner_data)
+            print("Button pressed: Agglomerative Clustering")
+        
+        if btn == "Complete-link Agglomerative Clustering":
+            qry = open("query.txt", "w")
+            qry.write(inner_data)
+            qry.close()
+            # Relevance_Results, Cluster_Results = cluster_results('query.txt')
+            qry_param = "text:(+%s)" % (inner_data)
+            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
+            result = getSolrData.parse_solr_results(solr_results)
+
+            Relevance_Results = clustering.get_clustering_results(result, btn)
+            # Cluster_Results = clustering.get_clustering_results(result, btn)
             Query_Results = Google_Bing_Results(inner_data)
             print("Button pressed: Agglomerative Clustering")
 
