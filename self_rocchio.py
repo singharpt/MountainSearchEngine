@@ -42,7 +42,7 @@ class Rocchio:
                 wordsFiltered.append(w)
         return wordsFiltered
 
-    def get_document_data(self) -> dict & list:
+    def get_document_data(self):
         '''
         1.  For every document fetched from solr it tokenizes the content present in the document.
         2.  Creates a dictionary of documents & tokens inside the documents.
@@ -141,4 +141,3 @@ class Rocchio:
         
 rocchio = Rocchio("Mountains Largest")
 print("Expanded Query By Rocchio --> ", rocchio.get_rocchio_expanded_query())
-
