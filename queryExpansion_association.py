@@ -1,22 +1,33 @@
 import re
 import numpy as np
 from nltk.corpus import stopwords
-from getSolrData import get_results_from_solr, parse_solr_results
+from getSolrData import get_results_from_solr
+from nltk.tokenize import wordpunct_tokenize
+from nltk.corpus import stopwords
+from string import punctuation
 
-def tokenize_doc(doc_text, stop_words):
-    # doc_text = doc_text.replace('\n', ' ')
-    # doc_text = " ".join(re.findall('[a-zA-Z]+', doc_text))
-    # tokens = doc_text.split(' ')
-    tokens = []
-    text = doc_text
-    text = re.sub(r'[\n]', ' ', text)
-    text = re.sub(r'[,-]', ' ', text)
-    text = re.sub(r'[^\w\s]', '', text)
-    text = re.sub('[0-9]', '', text)
-    text = text.lower()
-    tkns = text.split(' ')
-    tokens = [token for token in tkns if token not in stop_words and token != '' and not token.isnumeric()]
-    return tokens
+# def tokenize_doc(doc_text, stop_words):
+#     # doc_text = doc_text.replace('\n', ' ')
+#     # doc_text = " ".join(re.findall('[a-zA-Z]+', doc_text))
+#     # tokens = doc_text.split(' ')
+#     tokens = []
+#     text = doc_text
+#     text = re.sub(r'[\n]', ' ', text)
+#     text = re.sub(r'[,-]', ' ', text)
+#     text = re.sub(r'[^\w\s]', '', text)
+#     text = re.sub('[0-9]', '', text)
+#     text = text.lower()
+#     tkns = text.split(' ')
+#     tokens = [token for token in tkns if token not in stop_words and token != '' and not token.isnumeric()]
+#     return tokens
+
+def tokenize_doc(doc_text, stop_words=stopwords.words("english")):
+    words =  wordpunct_tokenize(doc_text.lower())
+    wordsFiltered = []
+    for w in words:
+        if w not in punctuation and w not in stop_words and not w.isnumeric():
+            wordsFiltered.append(w)
+    return wordsFiltered
 
 def build_association(id_token_map, vocab, query):
     association_list = []
@@ -32,26 +43,24 @@ def build_association(id_token_map, vocab, query):
             c1 /= (c1 + c2 + c3)
             if c1 != 0:
                 association_list.append((voc, word, c1))
-
     return association_list
 
 def association_main(query, solr_results):
     stop_words = set(stopwords.words('english'))
     tokens = []
-    token_counts = {}
     tokens_map = {}
-    document_ids = []
 
     for result in solr_results:
         tokens_this_document = tokenize_doc(result['content'], stop_words)
-        tokens_map[result['rank']] = tokens_this_document
+        tokens_map[result['digest']] = tokens_this_document
         tokens.append(tokens_this_document)
 
     vocab = set([token for tokens_this_doc in tokens for token in tokens_this_doc])
     association_list = build_association(tokens_map, vocab, query)
     association_list.sort(key = lambda x: x[2],reverse=True)
+    print(association_list)
 
-    i=1;
+    i=1
     while(i<5):
         query += ' '+str(association_list[i][0])
         i +=1
@@ -65,10 +74,9 @@ def get_documents(solr_results):
     return documents
 
 #Function start
-query = "green moutains"
+query = "mountains"
 solr_query_format = "content:({})".format(query)
-solr_results = get_results_from_solr(solr_query_format, 500)
-solr_results = parse_solr_results(solr_results)
+solr_results = get_results_from_solr(solr_query_format, 50)
 documents = get_documents(solr_results)
 expanded_query = association_main(query, documents)
 print(expanded_query)
