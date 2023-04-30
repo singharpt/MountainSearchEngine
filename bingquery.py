@@ -3,7 +3,7 @@
 #
 # search_url = "https://api.bing.microsoft.com/v7.0/search"
 # search_term = "Mountains"
-#
+
 # import requests
 #
 # headers = {"Ocp-Apim-Subscription-Key": subscription_key}
