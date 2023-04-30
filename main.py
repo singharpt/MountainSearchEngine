@@ -48,7 +48,7 @@ def index():
         inner_data = form_data['query']
         btn = form_data['search']
         qry = open("query.txt", "w")
-
+        print("btn: ", btn)
 
         if btn == "Vector Space Relevance":
             qry = open("query.txt", "w")

@@ -47,7 +47,7 @@
             background-color: white;
             overflow-y: scroll; 
             flex-grow: 2; 
-            height: 55%;
+            height: 50%;
             /* border: solid 1px black; */
             padding: 20px;
             margin-top: 20px;
@@ -95,7 +95,17 @@
             background: #0262FF;
             color: white;
         }
-
+        .search-label{
+            white-space: nowrap;
+            background: white;
+            padding: 7px;
+            width: 175px;
+            border-radius: 10px;
+            border: none;
+            height: 40px;
+            margin: 5px;
+            color: #0262FF;
+        }
     </style>
 </head>
   
@@ -113,10 +123,27 @@
                     </div>
                     <div id="search-options" style="margin-bottom: 20px; display: flex; justify-content: center">
                         <input class="searchbutton" style="width: 190px; border-radius: 10px; border: none ;height: 40px; margin: 5px;" type="submit" name="search" value="Vector Space Relevance">
-                        <input class="searchbutton" style="width: 190px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="PageRanking + HITS">
+{#                        <input class="searchbutton" style="width: 190px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="PageRanking + HITS">#}
 {#                        <input style="width: 170px; border-radius: 10px; height: 40px; background-color:#fafafa; " type="submit" name="search" value="Search(Link Analysis)">#}
-                        <input class="searchbutton" style="width: 150px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Flat Clustering">
-                        <input class="searchbutton" style="width: 200px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Agglomerative Clustering">
+
+                        <label class="search-label" for="clustering">Relevence Options: </label>
+                        <select class="searchbutton" style="width: 200px; border-radius: 10px; border: none; height: 40px; margin: 5px;" name="search" id="clustering" onchange="this.form.submit()">
+                          <option></option>
+                          <option value="PageRanking" >PageRanking</option>
+                          <option value="HITS ">HITS</option>
+                        </select>
+
+
+                        <label class="search-label" for="clustering">Clustering Options: </label>
+                        <select class="searchbutton" style="width: 200px; border-radius: 10px; border: none; height: 40px; margin: 5px;" name="search" id="clustering" onchange="this.form.submit()">
+                          <option></option>
+                          <option value="Flat Clustering" >Flat Clustering</option>
+                          <option value="Agglomerative Clustering">Agglomerative Clustering</option>
+                        </select>
+
+{##}
+{#                        <input class="searchbutton" style="width: 150px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Flat Clustering">#}
+{#                        <input class="searchbutton" style="width: 200px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Agglomerative Clustering">#}
 
                         <!-- <label for="clustering">Cluster:</label>
                         <select name="cluster" id="cluster">
