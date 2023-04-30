@@ -1,6 +1,5 @@
-# global lines
-
 def get_clustering_results(clust_inp, param_type):
+    global lines
     if param_type == "Flat Clustering":
         f = open('clustering_data/clustering_f.txt')
         lines = f.readlines()
@@ -33,7 +32,7 @@ def get_clustering_results(clust_inp, param_type):
             curr_resp.update({"rank": str(curr_rank)})
             curr_rank += 1
             clust_resp.append({"title": curr_resp["title"], "url": curr_resp["url"],
-                               "meta_info": curr_resp["meta_info"], "rank": curr_resp["rank"]})
+                               "meta_info": curr_resp["meta_info"], "rank": curr_resp["rank"], "cluster" : curr_cluster})
             for remaining_resp in clust_inp:
                 if remaining_resp["done"] == "False":
                     if remaining_resp["cluster"] == curr_cluster:
@@ -41,6 +40,6 @@ def get_clustering_results(clust_inp, param_type):
                         remaining_resp.update({"rank": str(curr_rank)})
                         curr_rank += 1
                         clust_resp.append({"title": remaining_resp["title"], "url": remaining_resp["url"],
-                                           "meta_info": remaining_resp["meta_info"], "rank": remaining_resp["rank"]})
+                                           "meta_info": remaining_resp["meta_info"], "rank": remaining_resp["rank"], "cluster" : curr_cluster})
 
     return clust_resp
