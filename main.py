@@ -47,23 +47,42 @@ def index():
         # print(data)
         inner_data = form_data['query']
         btn = form_data['search']
+
         qry = open("query.txt", "w")
         print("btn: ", btn)
 
         if btn == "Vector Space Relevance":
+            # qry = open("query.txt", "w")
+            # qry.write(inner_data)
+            # qry.close()
+            # print("Button pressed: Vector Space Relevance")
+
+            # qry_param = "text:(+%s)" % (inner_data)
+            # solr_results = getSolrData.get_results_from_solr(qry_param, 10)
+            # result = getSolrData.parse_solr_results(solr_results)
+            #
+            # Relevance_Results = result
+            # # Relevance_Results = "Button pressed: Vector Space Relevance"
+            # Query_Results = Google_Bing_Results(inner_data)
+            # # Relevance_Results = ["relevance_results('query.txt')"]
+
+            print("Button pressed: Flat Clustering ")
             qry = open("query.txt", "w")
             qry.write(inner_data)
             qry.close()
-            print("Button pressed: Vector Space Relevance")
-
             qry_param = "text:(+%s)" % (inner_data)
             solr_results = getSolrData.get_results_from_solr(qry_param, 10)
             result = getSolrData.parse_solr_results(solr_results)
+            btn = "Single-link Agglomerative Clustering"
+            # Relevance_Results = clustering.get_clustering_results(result, btn)
+            Cluster_Results = clustering.get_clustering_results(result, btn)
+            # Relevance_Results, Cluster_Results = cluster_results('query.txt')
+            # Relevance_Results = ['Test1']
+            print("Cluster_Results: ", Cluster_Results)
 
-            Relevance_Results = result
-            # Relevance_Results = "Button pressed: Vector Space Relevance"
             Query_Results = Google_Bing_Results(inner_data)
-            # Relevance_Results = ["relevance_results('query.txt')"]
+            print("Button pressed: Flat Clustering")
+
 
         if btn == "PageRanking + HITS":
             qry = open("query.txt", "w")
@@ -75,6 +94,7 @@ def index():
             print("Button pressed: PageRanking + HITS")
 
         if btn == "Flat Clustering":
+            print("Button pressed: Flat Clustering ")
             qry = open("query.txt", "w")
             qry.write(inner_data)
             qry.close()
@@ -82,10 +102,11 @@ def index():
             solr_results = getSolrData.get_results_from_solr(qry_param, 10)
             result = getSolrData.parse_solr_results(solr_results)
 
-            Relevance_Results = clustering.get_clustering_results(result, btn)
-            # Cluster_Results = clustering.get_clustering_results(result, btn)
+            # Relevance_Results = clustering.get_clustering_results(result, btn)
+            Cluster_Results = clustering.get_clustering_results(result, btn)
             # Relevance_Results, Cluster_Results = cluster_results('query.txt')
             # Relevance_Results = ['Test1']
+            print("Cluster_Results: ", Cluster_Results)
             
             Query_Results = Google_Bing_Results(inner_data)
             print("Button pressed: Flat Clustering")
@@ -99,10 +120,11 @@ def index():
             solr_results = getSolrData.get_results_from_solr(qry_param, 10)
             result = getSolrData.parse_solr_results(solr_results)
 
-            Relevance_Results = clustering.get_clustering_results(result, btn)
-            # Cluster_Results = clustering.get_clustering_results(result, btn)
+            # Relevance_Results = clustering.get_clustering_results(result, btn)
+            Cluster_Results = clustering.get_clustering_results(result, btn)
             Query_Results = Google_Bing_Results(inner_data)
             print("Button pressed: Agglomerative Clustering")
+            print("Cluster_Results: ", Cluster_Results)
         
         if btn == "Complete-link Agglomerative Clustering":
             qry = open("query.txt", "w")
