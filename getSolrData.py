@@ -34,7 +34,7 @@ def parse_solr_results(solr_results):
             link_json = {
                 "title": title,
                 "url": url,
-                "content": meta_info,
+                "meta_info": meta_info,
                 "rank": rank
             }
             api_resp.append(link_json)
@@ -43,7 +43,7 @@ def parse_solr_results(solr_results):
 # solr_results = get_results_from_solr("text:(+mountain)", 10)
 # #
 # result = parse_solr_results(solr_results)
-
+#
 # print(type(result))
 # for r in result:
 #     # print(r["content"], "\n\n")
