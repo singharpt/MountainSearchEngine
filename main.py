@@ -2,9 +2,10 @@ import math
 from flask import Flask, render_template, url_for, request
 import bingquery as bing_call
 import googlequery as google_call
-from getSolrData import get_results_from_solr
 from queryExpansion_association import *
-# from getSolrData import *
+from pageRank import *
+from getSolrData import *
+from hitsTrial import *
 import getSolrData
 import clustering
 # from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
@@ -18,6 +19,7 @@ import clustering
 # from sknetwork.ranking import PageRank
 # import pandas as pd
 import json
+
 
 # import ast
 # from bs4 import BeautifulSoup
@@ -57,127 +59,96 @@ def index():
         qry = open("query.txt", "w")
         print("btn: ", btn)
 
-        if btn == "Vector Space Relevance":
-            qry = open("query.txt", "w")
-            qry.write(inner_data)
-            qry.close()
-            print("Button pressed: Vector Space Relevance")
+        if len(inner_data) > 0:
 
-            qry_param = "text:(+%s)" % (inner_data)
-            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
-            result = getSolrData.parse_solr_results(solr_results)
-            
-            Relevance_Results = result
-            # Relevance_Results = "Button pressed: Vector Space Relevance"
-            Query_Results = Google_Bing_Results(inner_data)
-            # Relevance_Results = ["relevance_results('query.txt')"]
-
-            qry = open("query.txt", "w")
-            qry.write(inner_data)
-            qry.close()
-            qry_param = "text:(+%s)" % (inner_data)
-            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
-            result = getSolrData.parse_solr_results(solr_results)
-            btn = "Single-link Agglomerative Clustering"
-            # Relevance_Results = clustering.get_clustering_results(result, btn)
-            Cluster_Results = clustering.get_clustering_results(result, btn)
-            # Relevance_Results, Cluster_Results = cluster_results('query.txt')
-            # Relevance_Results = ['Test1']
-            print("Cluster_Results: ", Cluster_Results)
-
-            Query_Results = Google_Bing_Results(inner_data)
-            print("Button pressed: Flat Clustering")
-
-
-        if btn == "HITS":
-            qry = open("query.txt", "w")
-            qry.write(inner_data)
-            qry.close()
-            # Relevance_Results = relevance_results('query.txt')
-            Query_Results = Google_Bing_Results(inner_data)
-            Relevance_Results = ["relevance_results('query.txt')"]
-            print("Button pressed: PageRanking + HITS")
-
-        if btn == "PageRanking":
-            qry = open("query.txt", "w")
-            qry.write(inner_data)
-            qry.close()
-            # Relevance_Results = relevance_results('query.txt')
-            Query_Results = Google_Bing_Results(inner_data)
-            Relevance_Results = ["relevance_results('query.txt')"]
-            print("Button pressed: PageRanking + HITS")
-
-        if btn == "Flat Clustering":
-            print("Button pressed: Flat Clustering ")
-            qry = open("query.txt", "w")
-            qry.write(inner_data)
-            qry.close()
-            qry_param = "text:(+%s)" % (inner_data)
-            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
-            result = getSolrData.parse_solr_results(solr_results)
-
-            # Relevance_Results = clustering.get_clustering_results(result, btn)
-            Cluster_Results = clustering.get_clustering_results(result, btn)
-            # Relevance_Results, Cluster_Results = cluster_results('query.txt')
-            # Relevance_Results = ['Test1']
-            print("Cluster_Results: ", Cluster_Results)
-            
-            Query_Results = Google_Bing_Results(inner_data)
-            print("Button pressed: Flat Clustering")
-
-        if btn == "Single-link Agglomerative Clustering":
-            qry = open("query.txt", "w")
-            qry.write(inner_data)
-            qry.close()
-            # Relevance_Results, Cluster_Results = cluster_results('query.txt')
-            qry_param = "text:(+%s)" % (inner_data)
-            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
-            result = getSolrData.parse_solr_results(solr_results)
-
-            # Relevance_Results = clustering.get_clustering_results(result, btn)
-            Cluster_Results = clustering.get_clustering_results(result, btn)
-            Query_Results = Google_Bing_Results(inner_data)
-            print("Button pressed: Agglomerative Clustering")
-            print("Cluster_Results: ", Cluster_Results)
-        
-        if btn == "Complete-link Agglomerative Clustering":
-            qry = open("query.txt", "w")
-            qry.write(inner_data)
-            qry.close()
-            # Relevance_Results, Cluster_Results = cluster_results('query.txt')
-            qry_param = "text:(+%s)" % (inner_data)
-            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
-            result = getSolrData.parse_solr_results(solr_results)
-
-            Relevance_Results = clustering.get_clustering_results(result, btn)
-            # Cluster_Results = clustering.get_clustering_results(result, btn)
-            Query_Results = Google_Bing_Results(inner_data)
-            print("Button pressed: Agglomerative Clustering")
-
-        if btn == "Association Clustering":
             solr_query_format = "content:({})".format(inner_data)
-            solr_results = get_results_from_solr(solr_query_format, 50)
-            documents = get_documents(solr_results)
-            expanded_query = association_main(inner_data, documents)
+            Query_Results = Google_Bing_Results(inner_data)
 
-        if btn == "Scalar Clustering":
-            pass
+            if btn == "Vector Space Relevance":
+                print("Button pressed: Vector Space Relevance")
+                solr_results = get_results_from_solr(solr_query_format, 10)
+                Relevance_Results = parse_solr_results(solr_results)
 
-        if btn == "Metric Clustering":
-            pass
+            if btn == "HITS":
+                print("Button pressed: HITS")
+                solr_results = get_results_from_solr(solr_query_format, 10)
+                solr_results = parse_solr_results(solr_results)
+                authority_score_dict = get_authority_scores_data()
+                Relevance_Results = add_authority_scores(solr_results, authority_score_dict)
 
-        if btn == "Query Expansion Rocchio":
-            pass
+            if btn == "PageRanking":
+                print("Button pressed: PageRanking")
+                solr_results = get_results_from_solr(inner_data, 10)
+                solr_results = parse_solr_results(solr_results)
+                pagerank_score_dict = get_pagerank_scores_data()
+                Relevance_Results = add_pagerank_scores(solr_results, pagerank_score_dict)
+                
+            if btn == "Flat Clustering":
+                print("Button pressed: Flat Clustering ")
+                qry = open("query.txt", "w")
+                qry.write(inner_data)
+                qry.close()
+                qry_param = "text:(+%s)" % (inner_data)
+                solr_results = getSolrData.get_results_from_solr(qry_param, 10)
+                result = getSolrData.parse_solr_results(solr_results)
 
-        if btn == "Rocchio Algorithm":
-            pass
+                # Relevance_Results = clustering.get_clustering_results(result, btn)
+                Cluster_Results = clustering.get_clustering_results(result, btn)
+                # Relevance_Results, Cluster_Results = cluster_results('query.txt')
+                # Relevance_Results = ['Test1']
+                print("Cluster_Results: ", Cluster_Results)
+                print("Button pressed: Flat Clustering")
 
-        if btn == 'reset':
-            pass
-            # Query_Results = False
-            # Relevance_Results = False
-            # Cluster_Results = False
-            # Query_Expansion_Results = False
+            if btn == "Single-link Agglomerative Clustering":
+                qry = open("query.txt", "w")
+                qry.write(inner_data)
+                qry.close()
+                # Relevance_Results, Cluster_Results = cluster_results('query.txt')
+                qry_param = "text:(+%s)" % (inner_data)
+                solr_results = getSolrData.get_results_from_solr(qry_param, 10)
+                result = getSolrData.parse_solr_results(solr_results)
+
+                # Relevance_Results = clustering.get_clustering_results(result, btn)
+                Cluster_Results = clustering.get_clustering_results(result, btn)
+                print("Button pressed: Agglomerative Clustering")
+                print("Cluster_Results: ", Cluster_Results)
+            
+            if btn == "Complete-link Agglomerative Clustering":
+                qry = open("query.txt", "w")
+                qry.write(inner_data)
+                qry.close()
+                # Relevance_Results, Cluster_Results = cluster_results('query.txt')
+                qry_param = "text:(+%s)" % (inner_data)
+                solr_results = getSolrData.get_results_from_solr(qry_param, 10)
+                result = getSolrData.parse_solr_results(solr_results)
+
+                Relevance_Results = clustering.get_clustering_results(result, btn)
+                # Cluster_Results = clustering.get_clustering_results(result, btn)
+                print("Button pressed: Agglomerative Clustering")
+
+            if btn == "Association Clustering":
+                solr_results = get_results_from_solr(solr_query_format, 50)
+                documents = get_documents(solr_results)
+                expanded_query = association_main(inner_data, documents)
+
+            if btn == "Scalar Clustering":
+                pass
+
+            if btn == "Metric Clustering":
+                pass
+
+            if btn == "Query Expansion Rocchio":
+                pass
+
+            if btn == "Rocchio Algorithm":
+                pass
+
+            if btn == 'reset':
+                pass
+                # Query_Results = False
+                # Relevance_Results = False
+                # Cluster_Results = False
+                # Query_Expansion_Results = False
 
     return render_template('ir.html', Query_Results=Query_Results, Relevance_Results=Relevance_Results, Cluster_Results=False)
 
