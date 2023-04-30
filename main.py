@@ -2,6 +2,8 @@ import math
 from flask import Flask, render_template, url_for, request
 import bingquery as bing_call
 import googlequery as google_call
+from getSolrData import get_results_from_solr
+from queryExpansion_association import *
 # from getSolrData import *
 import getSolrData
 import clustering
@@ -46,27 +48,30 @@ def index():
         form_data = json.loads(data)
         # print(data)
         inner_data = form_data['query']
-        btn = form_data['search']
-
+        btn = [form_data['relevance'], form_data['clustering'], form_data['expansion']]
+        btn = [s for s in btn if s != ""]
+        if len(btn) > 0:
+            btn = btn[0]
+        else:
+            btn = 'reset'
         qry = open("query.txt", "w")
         print("btn: ", btn)
 
         if btn == "Vector Space Relevance":
-            # qry = open("query.txt", "w")
-            # qry.write(inner_data)
-            # qry.close()
-            # print("Button pressed: Vector Space Relevance")
+            qry = open("query.txt", "w")
+            qry.write(inner_data)
+            qry.close()
+            print("Button pressed: Vector Space Relevance")
 
-            # qry_param = "text:(+%s)" % (inner_data)
-            # solr_results = getSolrData.get_results_from_solr(qry_param, 10)
-            # result = getSolrData.parse_solr_results(solr_results)
-            #
-            # Relevance_Results = result
-            # # Relevance_Results = "Button pressed: Vector Space Relevance"
-            # Query_Results = Google_Bing_Results(inner_data)
-            # # Relevance_Results = ["relevance_results('query.txt')"]
+            qry_param = "text:(+%s)" % (inner_data)
+            solr_results = getSolrData.get_results_from_solr(qry_param, 10)
+            result = getSolrData.parse_solr_results(solr_results)
+            
+            Relevance_Results = result
+            # Relevance_Results = "Button pressed: Vector Space Relevance"
+            Query_Results = Google_Bing_Results(inner_data)
+            # Relevance_Results = ["relevance_results('query.txt')"]
 
-            print("Button pressed: Flat Clustering ")
             qry = open("query.txt", "w")
             qry.write(inner_data)
             qry.close()
@@ -84,7 +89,16 @@ def index():
             print("Button pressed: Flat Clustering")
 
 
-        if btn == "PageRanking + HITS":
+        if btn == "HITS":
+            qry = open("query.txt", "w")
+            qry.write(inner_data)
+            qry.close()
+            # Relevance_Results = relevance_results('query.txt')
+            Query_Results = Google_Bing_Results(inner_data)
+            Relevance_Results = ["relevance_results('query.txt')"]
+            print("Button pressed: PageRanking + HITS")
+
+        if btn == "PageRanking":
             qry = open("query.txt", "w")
             qry.write(inner_data)
             qry.close()
@@ -140,16 +154,30 @@ def index():
             Query_Results = Google_Bing_Results(inner_data)
             print("Button pressed: Agglomerative Clustering")
 
-        if btn == "Query Expansion":
-            Relevance_Results = ['Test1']
-            Query_Results = Google_Bing_Results(inner_data)
-            print("Button pressed: Query Expansion")
+        if btn == "Association Clustering":
+            solr_query_format = "content:({})".format(inner_data)
+            solr_results = get_results_from_solr(solr_query_format, 50)
+            documents = get_documents(solr_results)
+            expanded_query = association_main(inner_data, documents)
 
-        if btn == "Reset":
-            Query_Results = False
-            Relevance_Results = False
-            Cluster_Results = False
-            Query_Expansion_Results = False
+        if btn == "Scalar Clustering":
+            pass
+
+        if btn == "Metric Clustering":
+            pass
+
+        if btn == "Query Expansion Rocchio":
+            pass
+
+        if btn == "Rocchio Algorithm":
+            pass
+
+        if btn == 'reset':
+            pass
+            # Query_Results = False
+            # Relevance_Results = False
+            # Cluster_Results = False
+            # Query_Expansion_Results = False
 
     return render_template('ir.html', Query_Results=Query_Results, Relevance_Results=Relevance_Results, Cluster_Results=False)
 
