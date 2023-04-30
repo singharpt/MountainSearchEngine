@@ -72,11 +72,3 @@ def get_documents(solr_results):
         if "content" in doc:
             documents.append(doc)
     return documents
-
-#Function start
-query = "mountains"
-solr_query_format = "content:({})".format(query)
-solr_results = get_results_from_solr(solr_query_format, 50)
-documents = get_documents(solr_results)
-expanded_query = association_main(query, documents)
-print(expanded_query)

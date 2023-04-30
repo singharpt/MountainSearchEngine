@@ -118,10 +118,22 @@ def index():
             Query_Results = Google_Bing_Results(inner_data)
             print("Button pressed: Agglomerative Clustering")
 
-        if btn == "Query Expansion":
-            Relevance_Results = ['Test1']
-            Query_Results = Google_Bing_Results(inner_data)
-            print("Button pressed: Query Expansion")
+        if btn == "Query Expansion Association Clustering":
+                query = "mountains"
+                solr_query_format = "content:({})".format(query)
+                solr_results = get_results_from_solr(solr_query_format, 50)
+                documents = get_documents(solr_results)
+                expanded_query = association_main(query, documents)
+                print(expanded_query)
+
+        if btn == "Query Expansion Scalar Clustering":
+            pass
+
+        if btn == "Query Expansion Metric Clustering":
+            pass
+
+        if btn == "Query Expansion Rocchio":
+            pass
 
         if btn == "Reset":
             Query_Results = False
