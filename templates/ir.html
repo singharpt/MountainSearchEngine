@@ -3,10 +3,10 @@
   
 <head>
 
-  <title>Google Bing Results</title>
+  <title>Mountains</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='my-style.css') }}"> 
+{#  <link rel="stylesheet" href="{{ url_for('static', filename='my-style.css') }}"> #}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
     <style>
@@ -32,11 +32,13 @@
       }
   
       #search-engine {
-          padding: 10px;
+          padding: 50px;
           flex-grow: 1;
           display: flex;
           flex-direction: row;
           /* border: solid 1px green */
+          {#background: black;#}
+          margin-bottom: 20px;
       }
   
         #research-div {
@@ -44,7 +46,7 @@
             background-color: white;
             overflow-y: scroll; 
             flex-grow: 2; 
-            height: 50%;
+            height: 825px;
             /* border: solid 1px black; */
             padding: 20px;
             margin-top: 20px;
@@ -123,7 +125,7 @@
                           <option value="">Select Relevance Models</option>
                           <option value="Vector Space Relevance" >Vector Space Relevance</option>
                           <option value="PageRanking" >PageRanking</option>
-                          <option value="HITS ">HITS</option>
+                          <option value="HITS">HITS</option>
                         </select>
 
                         <select class="searchbutton" style="width: auto; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="clustering" onchange="this.form.submit()">
@@ -146,14 +148,14 @@
                 </div>
             </form>
 
-        {% if Query_Results %}
+
         <div id="search-engine" >
-                   <div id = "right-div" class="col-md-6">
-                <!-- {% if Query_Results %} -->
+
+        {% if Query_Results %}
+            <div id = "right-div" class="col-md-6">
 
                 <div id="bing-div">
-                   <h4>Bing</h4>
-                    <!-- <p>Google = {{Query_Results['google']}} </p> -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Bing_Fluent_Logo.svg" style="width:50px;height:50px; margin-bottom: 30px"/>
                     {% for res in Query_Results['bing'] %}
                     <br><a href="{{res[0]}}">{{res[0]}}</a>
                     <p style="padding:0%; margin: 0%; font-size: smaller; color: green;">{{res[1]}}</p>
@@ -164,11 +166,10 @@
 
                     {% endfor %}
                 </div>
-                    <div id="google-div">
-                    <h4>Google</h4>
-                    <!-- <img src="templates/Google-logo.png"/> -->
-                    <!-- <div class="image-box" style="background-image: url(templates/Google-logo.png)"></div> -->
-                    <!-- <p>Google = {{Query_Results['google']}} </p> -->
+
+                <div id="google-div">
+{#                    <h4>Google</h4>#}
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" style="width:50px;height:50px; margin-bottom: 30px"/>
                     {% for res in Query_Results['google'] %}
                     <!-- <p>Link = {{res[0]}} </p>
                     <p>Display Link = {{res[1]}} </p>
@@ -179,94 +180,51 @@
 
                     {% endfor %}
                 </div>
-                <!-- {% endif %} -->
             </div>
-            <div id="research-div" class="col-md-6">
-                <!-- GeeksforGeeks 4 -->
-                <h4>Our Search Engine</h4>
-                <!-- <form action="/forward/" method="post">
-                    <button name="forwardBtn" type="submit">Forward</button>
-                </form> -->
-                {% if Relevance_Results %}
-                <div>
-                    <!-- <h6>Relevance</h6> -->
-                    <!-- <p>{{Relevance_Results}}</p> -->
-                    <!-- {% for res in Relevance_Results %}
-                    <br><a href="{{res[0]}}">{{res[0]}}</a>
-                    <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[1]}}</p>
-                    
-                    {% endfor %} -->
-<!--                    ******************** change the range. VVVVV imp-->
+        {% endif %}
 
-                    {% for dict in Relevance_Results %}
-                    <br>
-{#                    <!-- <h6>Relevant document {{n+1}}</h6> -->#}
-                    <br>
-{#                        <a href="{{Relevance_Results[n]["url"]}}">{{Relevance_Results[n]["url"]}}</a>#}
-{#                        <p style="padding:0%; margin: 0%; font-size: smaller;">{{Relevance_Results[n]["title"]}}</p>#}
-{#                        <p style="padding:0%; margin: 0%; font-size: smaller;">{{Relevance_Results[n]["content"]}}</p>#}
-                         <a href="{{dict["url"]}}">{{dict["url"]}}</a>
-                        <p style="padding:0%; margin: 0%; font-size: smaller; color: green">{{dict["title"]}}</p>
-                        <p style="padding:0%; margin: 0%; font-size: smaller;">{{dict["content"]}}</p>
-{#                        <p>{{ Relevance_Results }}</p>#}
-                    
-                    {% if Cluster_Results %}
+                {% if Relevance_Results %}
+                    <div id="research-div" class="col-md-6">
+                    <h4>Our Search Engine</h4>
+                    <div>
+                        {% for dict in Relevance_Results %}
+
+                        <br>
+                            <a href="{{dict["url"]}}">{{dict["url"]}}</a>
+                            <p style="padding:0%; margin: 0%; font-size: smaller; color: green">{{dict["title"]}}</p>
+                            <p style="padding:0%; margin: 0%; font-size: smaller;">{{dict["meta_info"]}}</p>
+                        {% endfor %}
+                    </div>
+                    </div>
+                {% endif %}
+
+                {% if Cluster_Results %}
+                    <div id="research-div" class="col-md-6">
+                    <h4>Our Search Engine</h4>
                     <div>
                         <br>
                         <h6>Cluster for relevant document {{n+1}}</h6>
                         {% for res in Cluster_Results[n] %}
                         <br><a href="{{res[0]}}">{{res[0]}}</a>
                         <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[1]}}</p>
+                        <p>------------------------------------------------------</p>
                         {% endfor %}
                     </div>
-                    <p>------------------------------------------------------</p>
-                    {% endif %}
-                    
-                    {% endfor %}
-
-                    <!-- {% if Cluster_Results %}
-                    <div>
-                        <br> -->
-                        <!-- {% for res_list in Cluster_Results %}
-                            <br>
-                            <h6>Cluster for relevant documents</h6>
-                            {% for res in res_list %}
-                            <br><a href="{{res[0]}}">{{res[0]}}</a>
-                            <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[1]}}</p>
-                            {% endfor %}
-                        
-                        {% endfor %} -->
-
-                        <!-- {% for n in range(5) %}
-                            <br>
-                            <h6>Cluster for relevant documents {{n+1}}</h6>
-                            {% for res in Cluster_Results[n] %}
-                            <br><a href="{{res[0]}}">{{res[0]}}</a>
-                            <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[1]}}</p>
-                            {% endfor %}
-                        
-                        {% endfor %} -->
-                    <!-- </div>
-
-                    {% endif %} -->
-
-                </div>
+                    </div>
                 {% endif %}
-
-                
 
                 {% if Query_Expansion_Results %}
-                <div>
+                    <div id="research-div" class="col-md-6">
+                    <h4>Our Search Engine</h4>
+                    <div>
                     <h6>Query Expansion</h6>
                     <p>{{Query_Expansion_Results}}</p>
-                </div>
+                    </div>
+                    </div>
                 {% endif %}
 
-
             </div>
-
         </div>
-        {% endif %}
     </div>
 </div>
 </body>
