@@ -1,12 +1,13 @@
+# global lines
+
 def get_clustering_results(clust_inp, param_type):
-    global lines
     if param_type == "Flat Clustering":
         f = open('clustering_data/clustering_f.txt')
         lines = f.readlines()
         f.close()
 
-    elif param_type == "Agglomerative Clustering":
-        f = open('clustering_data/clustering_a.txt')
+    elif param_type == "Single-link Agglomerative Clustering":
+        f = open('clustering_data/clustering_h8.txt')
         lines = f.readlines()
         f.close()
 

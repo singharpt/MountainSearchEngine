@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='my-style.css') }}"> 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
-  
     <style>
       body, html {
         height: 100%;
@@ -32,7 +31,6 @@
             flex-direction: column;
       }
   
-  
       #search-engine {
           padding: 10px;
           flex-grow: 1;
@@ -42,7 +40,6 @@
       }
   
         #research-div {
-
             /* background-color: #fafafa;  */
             background-color: white;
             overflow-y: scroll; 
@@ -53,7 +50,6 @@
             margin-top: 20px;
             margin-right: 20px;
             border-radius: 25px;
-            
         }
 
         #right-div{
@@ -88,12 +84,13 @@
         .searchbutton:hover{
             background: white;
             color: #0262FF;
-            {#border: 2px solid #4CAF50;#}
+            border: 2px solid #4CAF50;
             border: 2px solid #0262FF;
         }
         .searchbutton{
             background: #0262FF;
             color: white;
+            padding: 10px;
         }
         .search-label{
             white-space: nowrap;
@@ -113,49 +110,42 @@
 <div class="bg">
 
     <div class="container">
-        <!-- <div id="box1"> -->
-            <h3 style=" margin-left: 250px; padding: 10px;">CS 6322 Information Retrieval - Mountain Search Engine (Team 11)  </h3>
+            <h3 style=" margin-top:20px; margin-left: 250px; padding: 10px;">CS 6322 Information Retrieval - Mountain Search Engine (Team 11)  </h3>
  
             <form action="{{ url_for('index') }}" method="POST" style="margin-left: 5px; padding: 20px; ">
                 <div>
                     <div id="search-box" style="margin-bottom: 20px; display: flex; justify-content: center">
-                        <input style="width: 500px; border-radius: 5px; border: none; height: 40px; padding: 5px; text-align: center;" type="text" name="query" placeholder="Enter your search query here">
+                        <input style="width: 500px; border-radius: 5px; border: none; height: 40px; padding: 5px; text-align: center;" type="text" name="query" placeholder="Enter your search query here" onblur="this.placeholder = 'Enter your search query here'" onfocus="this.placeholder = ''">
                     </div>
                     <div id="search-options" style="margin-bottom: 20px; display: flex; justify-content: center">
-                        <input class="searchbutton" style="width: 190px; border-radius: 10px; border: none ;height: 40px; margin: 5px;" type="submit" name="search" value="Vector Space Relevance">
-{#                        <input class="searchbutton" style="width: 190px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="PageRanking + HITS">#}
-{#                        <input style="width: 170px; border-radius: 10px; height: 40px; background-color:#fafafa; " type="submit" name="search" value="Search(Link Analysis)">#}
 
-                        <label class="search-label" for="clustering">Relevence Options: </label>
-                        <select class="searchbutton" style="width: 200px; border-radius: 10px; border: none; height: 40px; margin: 5px;" name="search" id="clustering" onchange="this.form.submit()">
-                          <option></option>
+                        <select class="searchbutton" style="width: auto; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="relevance" onchange="this.form.submit()">
+                          <option value="">Select Relevance Models</option>
+                          <option value="Vector Space Relevance" >Vector Space Relevance</option>
                           <option value="PageRanking" >PageRanking</option>
                           <option value="HITS ">HITS</option>
                         </select>
 
-
-                        <label class="search-label" for="clustering">Clustering Options: </label>
-                        <select class="searchbutton" style="width: 200px; border-radius: 10px; border: none; height: 40px; margin: 5px;" name="search" id="clustering" onchange="this.form.submit()">
-                          <option></option>
+                        <select class="searchbutton" style="width: auto; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="clustering" onchange="this.form.submit()">
+                          <option value="">Select Clustering Methods</option>
                           <option value="Flat Clustering" >Flat Clustering</option>
-                          <option value="Agglomerative Clustering">Agglomerative Clustering</option>
+                          <option value="Single-link Agglomerative Clustering">Single-link Agglomerative Clustering</option>
+                          <option value="Complete-link Agglomerative Clustering">Complete-link Agglomerative Clustering</option>
                         </select>
 
-{##}
-{#                        <input class="searchbutton" style="width: 150px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Flat Clustering">#}
-{#                        <input class="searchbutton" style="width: 200px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Agglomerative Clustering">#}
+                        <select class="searchbutton" style="width: auto; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="expansion" onchange="this.form.submit()">
+                          <option value="">Select Query Expansion Methods</option>
+                          <option value="Association Clustering" >Association Clustering</option>
+                          <option value="Scalar Clustering">Scalar Clustering</option>
+                          <option value="Metric Clustering">Metric Clustering</option>
+                          <option value="Rocchio Algorithm">Rocchio Algorithm</option>
+                        </select>
 
-                        <!-- <label for="clustering">Cluster:</label>
-                        <select name="cluster" id="cluster">
-                        <option value="kmeans">KMeans</option>
-                        <option value="aglo">Algomerrative</option>
-                        </select> -->
-                        <input class="searchbutton" style="width: 150px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Query Expansion">
-                        <input class="searchbutton" style=" width: 50px; border-radius: 10px; border: none; height: 40px; margin: 5px;" type="submit" name="search" value="Reset">
+                        <input class="searchbutton" style=" width: auto; border-radius: 10px; border: none; height: 40px; margin: 5px;" name="reset" type="submit" value="Reset">
                     </div>
                 </div>
             </form>
-        <!-- </div> -->
+
         {% if Query_Results %}
         <div id="search-engine" >
                    <div id = "right-div" class="col-md-6">
