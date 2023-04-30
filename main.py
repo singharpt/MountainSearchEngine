@@ -5,7 +5,7 @@ import googlequery as google_call
 from queryExpansion_association import *
 from pageRank import *
 from getSolrData import *
-from hitsTrial import *
+from hitsScore import *
 import getSolrData
 import clustering
 # from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
