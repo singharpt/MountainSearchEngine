@@ -64,8 +64,8 @@ def index():
 
         if len(inner_data) > 0:
 
-            solr_query_format = "content:({})".format(inner_data)
-            Query_Results = Google_Bing_Results(inner_data)
+            solr_query_format = "content:(+{})".format(inner_data)
+            # Query_Results = Google_Bing_Results(inner_data)
 
             if btn == "Vector Space Relevance":
                 print("Button pressed: ", btn)
@@ -81,14 +81,16 @@ def index():
                 solr_results = parse_solr_results(solr_results)
                 authority_score_dict = get_authority_scores_data()
                 Relevance_Results = add_authority_scores(solr_results, authority_score_dict)
+                print(Relevance_Results)
 
             if btn == "PageRanking":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-                solr_results = get_results_from_solr(inner_data, 10)
+                solr_results = get_results_from_solr(solr_query_format, 10)
                 solr_results = parse_solr_results(solr_results)
                 pagerank_score_dict = get_pagerank_scores_data()
                 Relevance_Results = add_pagerank_scores(solr_results, pagerank_score_dict)
+                print(Relevance_Results)
                 
             if btn == "Flat Clustering":
                 print("Button pressed: ", btn)
@@ -105,16 +107,13 @@ def index():
             if btn == "Association Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
+                
 
             if btn == "Scalar Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
 
             if btn == "Metric Clustering":
-                print("Button pressed: ", btn)
-                print('Query entered: ', inner_data)
-
-            if btn == "Query Expansion Rocchio":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
 
