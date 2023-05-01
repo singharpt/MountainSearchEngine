@@ -7,7 +7,7 @@ from pageRank import *
 from getSolrData import *
 from hitsScore import *
 import getSolrData
-import clustering
+from clustering import *
 # from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 # import math
 # from sklearn.metrics.pairwise import cosine_similarity
@@ -65,7 +65,7 @@ def index():
         if len(inner_data) > 0:
 
             solr_query_format = "content:({})".format(inner_data)
-            Query_Results = Google_Bing_Results(inner_data)
+            # Query_Results = Google_Bing_Results(inner_data)
 
             if btn == "Vector Space Relevance":
                 print("Button pressed: ", btn)
@@ -93,14 +93,25 @@ def index():
             if btn == "Flat Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-
+                solr_results = get_results_from_solr(solr_query_format, 10)
+                parse_results = parse_solr_results(solr_results)
+                Cluster_Results = get_clustering_results(parse_results, btn)
+                print(Cluster_Results)
             if btn == "Single-link Agglomerative Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
+                solr_results = get_results_from_solr(solr_query_format, 10)
+                parse_results = parse_solr_results(solr_results)
+                Cluster_Results = get_clustering_results(parse_results, btn)
+                print(Cluster_Results)
                 
             if btn == "Complete-link Agglomerative Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
+                solr_results = get_results_from_solr(solr_query_format, 10)
+                parse_results = parse_solr_results(solr_results)
+                Cluster_Results = get_clustering_results(parse_results, btn)
+                print(Cluster_Results)
 
             if btn == "Association Clustering":
                 print("Button pressed: ", btn)

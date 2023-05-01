@@ -6,7 +6,12 @@ def get_clustering_results(clust_inp, param_type):
         f.close()
 
     elif param_type == "Single-link Agglomerative Clustering":
-        f = open('clustering_data/clustering_h8.txt')
+        f = open('clustering_data/single_link_result_50k.txt')
+        lines = f.readlines()
+        f.close()
+    
+    elif param_type == "Complete-link Agglomerative Clustering":
+        f = open('clustering_data/complete_link_result_50k.txt')
         lines = f.readlines()
         f.close()
 
