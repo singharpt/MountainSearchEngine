@@ -186,13 +186,19 @@
                 {% if Relevance_Results %}
                     <div id="research-div" class="col-md-6">
                     <h4>Our Search Engine</h4>
+                    <h6>Showing results for Relevance Models</h6>
                     <div>
                         {% for dict in Relevance_Results %}
-
                         <br>
                             <a href="{{dict["url"]}}">{{dict["url"]}}</a>
                             <p style="padding:0%; margin: 0%; font-size: smaller; color: green">{{dict["title"]}}</p>
                             <p style="padding:0%; margin: 0%; font-size: smaller;">{{dict["meta_info"]}}</p>
+                            {% if dict["authority_score"] %}
+                            <p style="padding:0%; margin: 0%; font-size: smaller;font-weight: bold;">Authority Score: {{dict["authority_score"]}}</p>
+                            {% endif %}
+                            {% if dict["pagerank_score"] %}
+                            <p style="padding:0%; margin: 0%; font-size: smaller;font-weight: bold;">PageRank: {{dict["pagerank_score"]}}</p>
+                            {% endif %}
                         {% endfor %}
                     </div>
                     </div>
@@ -201,13 +207,14 @@
                 {% if Cluster_Results %}
                     <div id="research-div" class="col-md-6">
                     <h4>Our Search Engine</h4>
+                    <h6>Showing results for Clustering</h6>
                     <div>
+                        {% for dict in Cluster_Results %}
                         <br>
-                        <h6>Cluster for relevant document {{n+1}}</h6>
-                        {% for res in Cluster_Results[n] %}
-                        <br><a href="{{res[0]}}">{{res[0]}}</a>
-                        <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[1]}}</p>
-                        <p>------------------------------------------------------</p>
+                            <a href="{{dict["url"]}}">{{dict["url"]}}</a>
+                            <p style="padding:0%; margin: 0%; font-size: smaller; color: green">{{dict["title"]}}</p>
+                            <p style="padding:0%; margin: 0%; font-size: smaller;">{{dict["meta_info"]}}</p>
+                            <p style="padding:0%; margin: 0%; font-size: smaller; font-weight: bold;">Cluster: {{dict["cluster"]}}</p>
                         {% endfor %}
                     </div>
                     </div>
@@ -216,9 +223,15 @@
                 {% if Query_Expansion_Results %}
                     <div id="research-div" class="col-md-6">
                     <h4>Our Search Engine</h4>
+                    <h6>Showing results for Query Expansion</h6>
+                    <p style="padding:0%; margin: 0%; font-size: smaller; font-weight: bold;">Expanded Query: {{expanded_query}}</p>
                     <div>
-                    <h6>Query Expansion</h6>
-                    <p>{{Query_Expansion_Results}}</p>
+                    {% for dict in Query_Expansion_Results %}
+                        <br>
+                            <a href="{{dict["url"]}}">{{dict["url"]}}</a>
+                            <p style="padding:0%; margin: 0%; font-size: smaller; color: green">{{dict["title"]}}</p>
+                            <p style="padding:0%; margin: 0%; font-size: smaller;">{{dict["meta_info"]}}</p>
+                        {% endfor %}
                     </div>
                     </div>
                 {% endif %}

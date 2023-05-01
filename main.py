@@ -97,6 +97,7 @@ def index():
                 parse_results = parse_solr_results(solr_results)
                 Cluster_Results = get_clustering_results(parse_results, btn)
                 print(Cluster_Results)
+
             if btn == "Single-link Agglomerative Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
@@ -139,7 +140,7 @@ def index():
                 Cluster_Results = False
                 Query_Expansion_Results = False
 
-    return render_template('ir.html', Search_Results= Search_Results, Query_Results=Query_Results, Relevance_Results=Relevance_Results, Cluster_Results=False)
+    return render_template('ir.html', Search_Results= Search_Results, Query_Results=Query_Results, Relevance_Results=Relevance_Results, Cluster_Results=Cluster_Results)
 
 
 def get_title_link(results):
