@@ -95,14 +95,14 @@ def index():
                 print('Query entered: ', inner_data)
                 solr_results = get_results_from_solr(solr_query_format, 10)
                 parse_results = parse_solr_results(solr_results)
-                Cluster_Results = get_clustering_results(parse_results, btn)
+                Cluster_Results = get_clustering_results(parse_results, btn, inner_data)
                 print(Cluster_Results)
             if btn == "Single-link Agglomerative Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
                 solr_results = get_results_from_solr(solr_query_format, 10)
                 parse_results = parse_solr_results(solr_results)
-                Cluster_Results = get_clustering_results(parse_results, btn)
+                Cluster_Results = get_clustering_results(parse_results, btn, inner_data)
                 print(Cluster_Results)
                 
             if btn == "Complete-link Agglomerative Clustering":
@@ -110,7 +110,7 @@ def index():
                 print('Query entered: ', inner_data)
                 solr_results = get_results_from_solr(solr_query_format, 10)
                 parse_results = parse_solr_results(solr_results)
-                Cluster_Results = get_clustering_results(parse_results, btn)
+                Cluster_Results = get_clustering_results(parse_results, btn, inner_data)
                 print(Cluster_Results)
 
             if btn == "Association Clustering":
