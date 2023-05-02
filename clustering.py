@@ -8,7 +8,7 @@ import pandas as pd
 
 
 def get_clustering_results(clust_inp, param_type, inner_data):
-    fetched_url = process_query(clust_inp, inner_data)
+    # fetched_url = process_query(clust_inp, inner_data)
     global lines
     if param_type == "Flat Clustering":
         fetched_url = process_query(clust_inp, inner_data)
