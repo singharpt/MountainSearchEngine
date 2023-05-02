@@ -2,6 +2,9 @@ from flask import Flask, render_template, request
 import bingquery as bing_call
 import googlequery as google_call
 from queryExpansion_association import *
+from queryExpansion_scalar import *
+from queryExpansion_metric import *
+from queryExpansion_rocchio import *
 from pageRank import *
 from getSolrData import *
 from hitsScore import *
