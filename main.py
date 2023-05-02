@@ -101,7 +101,7 @@ def index():
             if btn == "Association Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-                solr_results = get_results_from_solr(solr_query_format, 20)
+                solr_results = get_results_from_solr(solr_query_format, 10)
                 documents = get_documents(solr_results)
                 expanded_query = association_main(inner_data, documents)
                 print("Expanded Query : ", expanded_query)
@@ -144,7 +144,7 @@ def index():
                 Query_Expansion_Results = False
                 Query=False
 
-    return render_template('ir.html', Query=Query, Query_Results=Query_Results, Relevance_Results=Relevance_Results, Cluster_Results=Cluster_Results)
+    return render_template('ir.html', Query=Query, Query_Results=Query_Results, Relevance_Results=Relevance_Results, Query_Expansion_Results=Query_Expansion_Results, QuerCluster_Results=Cluster_Results)
 # pull everything to main
 # go to userinterface and merge
 
