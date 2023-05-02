@@ -58,7 +58,6 @@ def association_main(query, solr_results):
     vocab = set([token for tokens_this_doc in tokens for token in tokens_this_doc])
     association_list = build_association(tokens_map, vocab, query)
     association_list.sort(key = lambda x: x[2],reverse=True)
-    print(association_list)
 
     i=1
     while(i<5):

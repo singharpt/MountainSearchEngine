@@ -1,12 +1,10 @@
-import math
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, request
 import bingquery as bing_call
 import googlequery as google_call
 from queryExpansion_association import *
 from pageRank import *
 from getSolrData import *
 from hitsScore import *
-import getSolrData
 from clustering import *
 import json
 
@@ -45,31 +43,33 @@ def index():
 
         if len(inner_data) > 0:
 
-            solr_query_format = "content:({})".format(inner_data)
+            solr_query_format = "content:(+{})".format(inner_data)
             # Query_Results = Google_Bing_Results(inner_data)
 
             if btn == "Vector Space Relevance":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
                 print("Button pressed: Vector Space Relevance")
-                solr_results = get_results_from_solr(solr_query_format, 10)
+                solr_results = get_results_from_solr(solr_query_format, 20)
                 Relevance_Results = parse_solr_results(solr_results)
 
             if btn == "HITS":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-                solr_results = get_results_from_solr(solr_query_format, 10)
+                solr_results = get_results_from_solr(solr_query_format, 20)
                 solr_results = parse_solr_results(solr_results)
                 authority_score_dict = get_authority_scores_data()
                 Relevance_Results = add_authority_scores(solr_results, authority_score_dict)
+                print(Relevance_Results)
 
             if btn == "PageRanking":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-                solr_results = get_results_from_solr(inner_data, 10)
+                solr_results = get_results_from_solr(solr_query_format, 20)
                 solr_results = parse_solr_results(solr_results)
                 pagerank_score_dict = get_pagerank_scores_data()
                 Relevance_Results = add_pagerank_scores(solr_results, pagerank_score_dict)
+                print(Relevance_Results)
                 
             if btn == "Flat Clustering":
                 print("Button pressed: ", btn)
@@ -98,22 +98,41 @@ def index():
             if btn == "Association Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
+                solr_results = get_results_from_solr(solr_query_format, 20)
+                documents = get_documents(solr_results)
+                expanded_query = association_main(inner_data, documents)
+                print("Expanded Query : ", expanded_query)
+                new_solr_results = get_results_from_solr("content:({})".format(expanded_query), 20)
+                Query_Expansion_Results = parse_solr_results(new_solr_results)
 
             if btn == "Scalar Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
+                solr_results = get_results_from_solr(solr_query_format, 20)
+                documents = get_documents(solr_results)
+                expanded_query = scalar_main(inner_data, documents)
+                print("Expanded Query : ", expanded_query)
+                solr_results = get_results_from_solr("content:({})".format(expanded_query), 20)
+                Query_Expansion_Results = parse_solr_results(solr_results)
 
             if btn == "Metric Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-
-            if btn == "Query Expansion Rocchio":
-                print("Button pressed: ", btn)
-                print('Query entered: ', inner_data)
+                solr_results = get_results_from_solr(solr_query_format, 20)
+                documents = get_documents(solr_results)
+                expanded_query = metric_main(inner_data, documents)
+                print("Expanded Query : ", expanded_query)
+                solr_results = get_results_from_solr("content:({})".format(expanded_query), 20)
+                Query_Expansion_Results = parse_solr_results(solr_results)
 
             if btn == "Rocchio Algorithm":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
+                rocchio = Rocchio(inner_data)
+                expanded_query = rocchio.rocchio_main()
+                print("Expanded Query : ", expanded_query)
+                solr_results = get_results_from_solr("content:({})".format(expanded_query), 20)
+                Query_Expansion_Results = parse_solr_results(solr_results)
 
             if btn == 'Reset':
                 Query_Results = False
@@ -125,6 +144,7 @@ def index():
     return render_template('ir.html', Query=Query, Query_Results=Query_Results, Relevance_Results=Relevance_Results, Cluster_Results=Cluster_Results)
 # pull everything to main
 # go to userinterface and merge
+
 def get_title_link(results):
     res = []
     for doc in results:

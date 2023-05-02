@@ -113,7 +113,7 @@ class Rocchio:
 
         return vector_query
     
-    def get_rocchio_expanded_query(self):
+    def rocchio_main(self):
         '''
         1.  Calls all the above functions and gets the respective data.
         2.  Calculate the exapnded query using the optimized query formula.
@@ -138,6 +138,3 @@ class Rocchio:
             Query_terms_Added.append(total_doc_terms[i])
 
         return " ".join(Query_terms_Added)
-        
-rocchio = Rocchio("Mountains Largest")
-print("Expanded Query By Rocchio --> ", rocchio.get_rocchio_expanded_query())

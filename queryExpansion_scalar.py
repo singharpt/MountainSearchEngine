@@ -163,12 +163,3 @@ def get_documents(solr_results):
         if "content" in doc:
             documents.append(doc)
     return documents
-
-#Function start
-query = "green moutains united states of america"
-solr_query_format = "content:({})".format(query)
-solr_results = get_results_from_solr(solr_query_format, 500)
-solr_results = parse_solr_results(solr_results)
-documents = get_documents(solr_results)
-expanded_query = scalar_main(query, documents)
-print(expanded_query)
