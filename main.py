@@ -26,7 +26,7 @@ def index():
     PageRanking = False
     Search_Results = False
     Query = ""
-
+    expanded_query = ""
     if request.method == 'POST':
         data = json.dumps(dict(request.form))
         print(data)
@@ -143,8 +143,9 @@ def index():
                 Cluster_Results = False
                 Query_Expansion_Results = False
                 Query=False
+                expanded_query = ""
 
-    return render_template('ir.html', Query=Query, Query_Results=Query_Results, Relevance_Results=Relevance_Results, Query_Expansion_Results=Query_Expansion_Results, QuerCluster_Results=Cluster_Results)
+    return render_template('ir.html', Expanded_Query=expanded_query, Query=Query, Query_Results=Query_Results, Relevance_Results=Relevance_Results, Query_Expansion_Results=Query_Expansion_Results, Cluster_Results=Cluster_Results)
 # pull everything to main
 # go to userinterface and merge
 
