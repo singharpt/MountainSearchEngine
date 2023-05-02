@@ -114,7 +114,7 @@ def get_metric_clusters(doc_tokens, token_2_stem, stem_2_tokens, query):
 
     return query_expands
 
-def metric_cluster_main(query, solr_results):
+def metric_main(query, solr_results):
     """
     Args:
         query(str): a text string of query
@@ -158,9 +158,6 @@ def metric_cluster_main(query, solr_results):
     query.extend(list(query_expands))
     query = ' '.join(query)
 
-    #print('Expanded query:', query)
-    #query = 'content:' + query
-
     return query
 
 def get_documents(solr_results):
@@ -169,13 +166,4 @@ def get_documents(solr_results):
         if "content" in doc:
             documents.append(doc)
     return documents
-
-#Function start
-query = "green moutains united states of america"
-solr_query_format = "content:({})".format(query)
-solr_results = get_results_from_solr(solr_query_format, 500)
-solr_results = parse_solr_results(solr_results)
-documents = get_documents(solr_results)
-expanded_query = metric_cluster_main(query, documents)
-print(expanded_query)
 
