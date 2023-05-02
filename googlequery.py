@@ -19,14 +19,11 @@ def g_search(query):
         snippet= ""
         displayLink =""
         link = result['formattedUrl']
-        # print(result['snippet'])
         if "snippet" not in result.keys():
             snippet = ""
         else:
             snippet = result['snippet']
-        # snippet = result['snippet']
-        # print(snippet)
-        # snippet = "X"
+
         displayLink = result['displayLink']
         temp_list_one_q = [link, displayLink, snippet]
         print("temp_list_one_q", temp_list_one_q)
