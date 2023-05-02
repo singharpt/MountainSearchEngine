@@ -36,13 +36,12 @@
           flex-grow: 1;
           display: flex;
           flex-direction: row;
-          /* border: solid 1px green */
           {#background: black;#}
           margin-bottom: 20px;
+          margin-top: 0px;
       }
   
         #research-div {
-            /* background-color: #fafafa;  */
             background-color: white;
             overflow-y: scroll; 
             flex-grow: 2; 
@@ -143,13 +142,16 @@
                           <option value="Rocchio Algorithm">Rocchio Algorithm</option>
                         </select>
 
-                        <input class="searchbutton" style=" width: auto; border-radius: 10px; border: none; height: 40px; margin: 5px;" name="reset" type="button" type="submit" value="Reset">
+                        <input class="searchbutton" style=" width: auto; border-radius: 10px; border: none; height: 40px; margin: 5px;" name="Reset" type="submit" value="Reset">
                     </div>
                 </div>
             </form>
 
+        {% if Query_Results %}
+        <h5 style="border-radius: 10px; padding: 20px; margin-left: 5%; margin-right: 5%;background: white">Search results for: {{ Query }}</h5>
+        {% endif %}
 
-        <div id="search-engine" >
+        <div  id="search-engine" >
 
         {% if Query_Results %}
             <div id = "right-div" class="col-md-6">
@@ -160,20 +162,12 @@
                     <br><a href="{{res[0]}}">{{res[0]}}</a>
                     <p style="padding:0%; margin: 0%; font-size: smaller; color: green;">{{res[1]}}</p>
                     <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[2]}}</p>
-                    <!-- <p>Link = {{res[0]}} </p>
-                    <p>Display Link = {{res[1]}} </p>
-                    <p>Snippet = {{res[2]}} </p> -->
-
                     {% endfor %}
                 </div>
 
                 <div id="google-div">
-{#                    <h4>Google</h4>#}
                     <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" style="width:50px;height:50px; margin-bottom: 30px"/>
                     {% for res in Query_Results['google'] %}
-                    <!-- <p>Link = {{res[0]}} </p>
-                    <p>Display Link = {{res[1]}} </p>
-                    <p>Snippet = {{res[2]}} </p> -->
                     <br><a href="{{res[0]}}">{{res[0]}}</a>
                     <p style="padding:0%; margin: 0%; font-size: smaller; color: green;">{{res[1]}}</p>
                     <p style="padding:0%; margin: 0%; font-size: smaller;">{{res[2]}}</p>
