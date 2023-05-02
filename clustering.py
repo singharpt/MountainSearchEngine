@@ -47,22 +47,23 @@ def get_clustering_results(clust_inp, param_type, inner_data):
 
     clust_resp = []
     curr_rank = 1
-    for curr_resp in clust_inp:
-        if param_type == "Flat Clustering" and curr_resp["done"] == "False" and curr_resp["cluster"] == fetched_cluster:
-            fetched_cluster = cluster_map[fetched_url]
-            curr_resp.update({"done": "True"})
-            curr_resp.update({"rank": str(curr_rank)})
-            curr_rank += 1
-            clust_resp.append({"title": curr_resp["title"], "url": curr_resp["url"],
-                               "meta_info": curr_resp["meta_info"], "rank": curr_resp["rank"], "cluster" : curr_cluster})
-            for remaining_resp in clust_inp:
-                if remaining_resp["done"] == "False":
-                    if remaining_resp["cluster"] == curr_cluster:
-                        remaining_resp.update({"done": "True"})
-                        remaining_resp.update({"rank": str(curr_rank)})
-                        curr_rank += 1
-                        clust_resp.append({"title": remaining_resp["title"], "url": remaining_resp["url"],
-                                           "meta_info": remaining_resp["meta_info"], "rank": remaining_resp["rank"], "cluster" : curr_cluster})
+    if param_type == "Flat Clustering":
+        fetched_cluster = cluster_map[fetched_url]
+        for curr_resp in clust_inp:
+            if  curr_resp["done"] == "False" and curr_resp["cluster"] == fetched_cluster:
+                curr_resp.update({"done": "True"})
+                curr_resp.update({"rank": str(curr_rank)})
+                curr_rank += 1
+                clust_resp.append({"title": curr_resp["title"], "url": curr_resp["url"],
+                                "meta_info": curr_resp["meta_info"], "rank": curr_resp["rank"], "cluster" : curr_cluster})
+                for remaining_resp in clust_inp:
+                    if remaining_resp["done"] == "False":
+                        if remaining_resp["cluster"] == curr_cluster:
+                            remaining_resp.update({"done": "True"})
+                            remaining_resp.update({"rank": str(curr_rank)})
+                            curr_rank += 1
+                            clust_resp.append({"title": remaining_resp["title"], "url": remaining_resp["url"],
+                                            "meta_info": remaining_resp["meta_info"], "rank": remaining_resp["rank"], "cluster" : curr_cluster})
 
     for curr_resp in clust_inp:
         if curr_resp["done"] == "False":
