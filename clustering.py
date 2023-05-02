@@ -12,12 +12,12 @@ def get_clustering_results(clust_inp, param_type, inner_data):
     global lines
     if param_type == "Flat Clustering":
         fetched_url = process_query(clust_inp, inner_data)
-        f = open('clustering_data/clustering_f.txt')
+        f = open('clustering_data/flat_clustering.txt')
         lines = f.readlines()
         f.close()
 
     elif param_type == "Single-link Agglomerative Clustering":
-        f = open('clustering_data/single_link_result_50k.txt')
+        f = open('clustering_data/single_link_data.txt')
         lines = f.readlines()
         f.close()
     
