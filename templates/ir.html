@@ -187,12 +187,12 @@
                             <a href="{{dict["url"]}}">{{dict["url"]}}</a>
                             <p style="padding:0%; margin: 0%; font-size: smaller; color: green">{{dict["title"]}}</p>
                             <p style="padding:0%; margin: 0%; font-size: smaller;">{{dict["meta_info"]}}</p>
-                            {% if dict["authority_score"] %}
-                            <p style="padding:0%; margin: 0%; font-size: smaller;font-weight: bold;">Authority Score: {{dict["authority_score"]}}</p>
-                            {% endif %}
-                            {% if dict["pagerank_score"] %}
-                            <p style="padding:0%; margin: 0%; font-size: smaller;font-weight: bold;">PageRank: {{dict["pagerank_score"]}}</p>
-                            {% endif %}
+{#                            {% if dict["authority_score"] %}#}
+{#                            <p style="padding:0%; margin: 0%; font-size: smaller;font-weight: bold;">Authority Score: {{dict["authority_score"]}}</p>#}
+{#                            {% endif %}#}
+{#                            {% if dict["pagerank_score"] %}#}
+{#                            <p style="padding:0%; margin: 0%; font-size: smaller;font-weight: bold;">PageRank: {{dict["pagerank_score"]}}</p>#}
+{#                            {% endif %}#}
                         {% endfor %}
                     </div>
                     </div>
@@ -218,7 +218,7 @@
                     <div id="research-div" class="col-md-6">
                     <h4>Our Search Engine</h4>
                     <h6>Showing results for Query Expansion</h6>
-                    <p style="padding:0%; margin: 0%; font-size: smaller; font-weight: bold;">Expanded Query: {{expanded_query}}</p>
+                    <p style="padding:0%; margin: 0%; font-size: smaller; font-weight: bold;">Expanded Query: {{Expanded_Query}}</p>
                     <div>
                     {% for dict in Query_Expansion_Results %}
                         <br>

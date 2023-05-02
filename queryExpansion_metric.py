@@ -1,33 +1,22 @@
-import re
 from collections import Counter
 import numpy as np
 from nltk.corpus import stopwords
 from nltk import PorterStemmer
-import json
 from tqdm import tqdm
-from getSolrData import get_results_from_solr, parse_solr_results
+from nltk.tokenize import wordpunct_tokenize
+from string import punctuation
 
 porter_stemmer = PorterStemmer()
-stop_words = set(stopwords.words('english'))
 
-def tokenize_text(text):
-    """
-    Args:
-        text(str): a string of text
-
-    Return:
-        tokens(list): a list of cleaned tokens
-    """
-    tokens = []
-    text = re.sub(r'[\n]', ' ', text) # remove enters
-    text = re.sub(r'[,-]', ' ', text) # remove comma and dash
-    text = re.sub('[0-9]', '', text) # remove all numbers
-    text = re.sub(r'[^\W\w\s]', '', text) # only keep A-Za-z_ and space
-    text = text.lower()
-    tkns = text.split()
-    # double check, remove empty tokens, stop words, and full numeric tokens
-    tokens = [token for token in tkns if token not in stop_words and token != '' and not token.isnumeric()]
-    return tokens
+def tokenize_text(doc_text):
+    stop_words = set(stopwords.words('english'))
+    words =  wordpunct_tokenize(doc_text.lower())
+    stop_words = stopwords.words("english")
+    wordsFiltered = []
+    for w in words:
+        if w not in punctuation and w not in stop_words and not w.isnumeric():
+            wordsFiltered.append(w)
+    return wordsFiltered
 
 def make_stem_map(vocab):
     """
@@ -69,9 +58,6 @@ def get_metric_clusters(doc_tokens, token_2_stem, stem_2_tokens, query):
     stems = list(sorted(stems))
     stem_2_idx = {s:i for i, s in enumerate(stems)}
 
-    # print('Vocab:', token_2_stem.keys())
-    # print('Stems:', stem_2_idx.keys())
-
     # count the number of variants for each stem
     stem_len = [len(stem_2_tokens[s]) for s in stems]
     stem_len = np.array(stem_len)
@@ -96,8 +82,8 @@ def get_metric_clusters(doc_tokens, token_2_stem, stem_2_tokens, query):
     # normalize correlation matrix and pick the top 3 expansion tokens
     query_expands_id = []
     for token in query:
-        stem = token_2_stem[token]
-        stem_id = stem_2_idx[stem]
+        # stem = token_2_stem[token] 
+        stem_id = stem_2_idx[token] #change by me: earlier -> stem_id = stem_2_idx[stem] 
 
         # normalize correlation matrix
         s_stem = c[stem_id, :] / (stem_len[stem_id] * stem_len)
@@ -123,17 +109,15 @@ def metric_main(query, solr_results):
     Return:
         query(str): a text string of expanded query
     """
-    # query = 'olympic medal'
-    # solr = pysolr.Solr('http://localhost:8983/solr/nutch/', always_commit=True, timeout=10)
-    # results = get_results_from_solr(query, solr)
     vocab = set()
     doc_tokens = []
 
     # tokenize query and query results, then build stem
-    if 'content:' == query[:8]:
-        query = query[8:]
-    query_text = query
-    query = tokenize_text(query)
+    # if 'content:' == query[:8]:
+    #     query = query[8:] #commented by me
+    query = tokenize_text(query) 
+    query = [porter_stemmer.stem(token) for token in query] #change made by me
+
     vocab.update(query)
     for result in tqdm(solr_results, desc='Preprocessing results'):
         if 'content' not in result:
@@ -149,14 +133,16 @@ def metric_main(query, solr_results):
     # expand query
     query_expands_stem = get_metric_clusters(doc_tokens, token_2_stem, stem_2_tokens, query)
     # convert from stem to tokens
-    query_expands = set()
-    for stem in query_expands_stem:
-        query_expands.update(list(stem_2_tokens[stem]))
+    # query_expands = set()
+    # for stem in query_expands_stem:
+    #     query_expands.update(list(stem_2_tokens[stem]))
     # generate new query
-    for token in query:
-        query_expands.discard(token)
-    query.extend(list(query_expands))
-    query = ' '.join(query)
+    # for token in query:
+    #     query_expands.discard(token)
+    query.extend(query_expands_stem)
+
+    # stemms = [porter_stemmer.stem(token) for token in query if token.isalpha()]
+    query = ' '.join(set(query))
 
     return query
 

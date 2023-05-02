@@ -4,6 +4,7 @@ from collections import Counter
 from nltk.tokenize import wordpunct_tokenize
 from nltk.corpus import stopwords
 from string import punctuation
+from nltk.stem import WordNetLemmatizer
 # import nltk
 # nltk.download('stopwords')
 
@@ -23,8 +24,8 @@ class Rocchio:
         3.  Gets results from the Solr for the initial query using a method present in getSolrData.py
         """
         self.alpha = 1
-        self.beta = 0.5
-        self.gamma = 0.1
+        self.beta = 0.7
+        self.gamma = 0.2
         self.query = query
         self.query_response = get_results_from_solr("text:({})".format(query), 50)
         self.relevant_results_threshold = 10
@@ -35,12 +36,15 @@ class Rocchio:
         1.  The get_tokens function returns a list of tokens that are not punctuations & stopwords.
         2.  Input to the function is String.
         """
+        lemmatizer = WordNetLemmatizer()
         words =  wordpunct_tokenize(text.lower())
         wordsFiltered = []
         for w in words:
-            if w not in punctuation and w not in self.english_stopwords:
+            if w not in punctuation and w not in self.english_stopwords and not w.isnumeric():
                 wordsFiltered.append(w)
-        return wordsFiltered
+        lemmas = [lemmatizer.lemmatize(token) for token in wordsFiltered]
+        lemmas = list(set(lemmas))
+        return lemmas
 
     def get_document_data(self):
         '''
