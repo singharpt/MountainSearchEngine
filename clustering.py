@@ -102,7 +102,7 @@ def process_query(clust_inp, query):
     vectorizer = TfidfVectorizer(min_df=0.0, stop_words='english', use_idf=True)
     X = vectorizer.fit_transform(document_list)
 
-    km = KMeans(n_clusters = 50, init='k-means++')
+    km = KMeans(n_clusters = 48, init='k-means++')
     km.fit(X)
 
     id_series = pd.Series(url_list)
