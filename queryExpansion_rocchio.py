@@ -29,6 +29,7 @@ class Rocchio:
         self.query = query
         self.query_response = get_results_from_solr("text:({})".format(query), 50)
         self.relevant_results_threshold = 10
+        self.irrelevant_results_threshold = 40
         self.english_stopwords = stopwords.words("english")
 
     def get_tokens(self, text) -> list:
@@ -76,7 +77,7 @@ class Rocchio:
         for docId in document_dict:
             if docId <= self.relevant_results_threshold:
                 relevant_results.append(document_dict[docId])
-            else:
+            elif docId > self.irrelevant_results_threshold:
                 irrelevant_results.append(document_dict[docId])
 
         return relevant_results, irrelevant_results

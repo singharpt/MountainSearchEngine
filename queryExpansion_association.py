@@ -46,7 +46,6 @@ def association_main(query, solr_results):
     vocab = set(vocab)
     association_list = build_association(tokens_map, vocab, query)
     association_list.sort(key = lambda x: x[2],reverse=True)
-    # print(association_list)
 
     i=1
     loop_limit = len(query) * 4

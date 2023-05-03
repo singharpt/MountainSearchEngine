@@ -134,7 +134,7 @@ def index():
                 rocchio = Rocchio(inner_data)
                 expanded_query = rocchio.rocchio_main()
                 print("Expanded Query : ", expanded_query)
-                solr_results = get_results_from_solr("content:({})".format(expanded_query), 20)
+                solr_results = get_results_from_solr("content:({})".format(expanded_query), 50)
                 Query_Expansion_Results = parse_solr_results(solr_results)
 
             if btn == 'Reset':
