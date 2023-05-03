@@ -82,8 +82,7 @@ def get_metric_clusters(doc_tokens, token_2_stem, stem_2_tokens, query):
     # normalize correlation matrix and pick the top 3 expansion tokens
     query_expands_id = []
     for token in query:
-        # stem = token_2_stem[token] 
-        stem_id = stem_2_idx[token] #change by me: earlier -> stem_id = stem_2_idx[stem] 
+        stem_id = stem_2_idx[token] 
 
         # normalize correlation matrix
         s_stem = c[stem_id, :] / (stem_len[stem_id] * stem_len)
@@ -113,10 +112,8 @@ def metric_main(query, solr_results):
     doc_tokens = []
 
     # tokenize query and query results, then build stem
-    # if 'content:' == query[:8]:
-    #     query = query[8:] #commented by me
     query = tokenize_text(query) 
-    query = [porter_stemmer.stem(token) for token in query] #change made by me
+    query = [porter_stemmer.stem(token) for token in query]
 
     vocab.update(query)
     for result in tqdm(solr_results, desc='Preprocessing results'):
@@ -132,17 +129,10 @@ def metric_main(query, solr_results):
 
     # expand query
     query_expands_stem = get_metric_clusters(doc_tokens, token_2_stem, stem_2_tokens, query)
-    # convert from stem to tokens
-    # query_expands = set()
-    # for stem in query_expands_stem:
-    #     query_expands.update(list(stem_2_tokens[stem]))
-    # generate new query
-    # for token in query:
-    #     query_expands.discard(token)
+
     query.extend(query_expands_stem)
 
-    # stemms = [porter_stemmer.stem(token) for token in query if token.isalpha()]
-    query = ' '.join(set(query))
+    query = ' '.join(list(set(query)))
 
     return query
 

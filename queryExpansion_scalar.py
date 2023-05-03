@@ -76,8 +76,7 @@ def get_scalar_cluster(doc_tokens, token_2_stem, stem_2_tokens, query):
     # expand query
     query_expands_id = []
     for token in query:
-        # stem = token_2_stem[token]
-        stem_id = stem_2_idx[token] #change made by me, replaced token with stem as parameter
+        stem_id = stem_2_idx[token]
 
         # calculate cosine simialrity for the token with all other stems
         stem_vec = np.expand_dims(s[stem_id, :], axis=0)
@@ -109,10 +108,8 @@ def scalar_main(query, solr_results):
     doc_tokens = []
 
     # tokenize query and query results, then build vocabulary
-    # if 'content:' == query[:8]:
-    #     query = query[8:] #commented by me
     query = tokenize_text(query)
-    query = [porter_stemmer.stem(token) for token in query] #change made by me
+    query = [porter_stemmer.stem(token) for token in query] 
 
     vocab.update(query)
     for result in tqdm(solr_results, desc='Preprocessing results'):
@@ -128,15 +125,9 @@ def scalar_main(query, solr_results):
 
     # expand query
     query_expands_stem = get_scalar_cluster(doc_tokens, token_2_stem, stem_2_tokens, query)
-    # # convert from stem to tokens
-    # query_expands = set()
-    # for stem in query_expands_stem:
-    #     query_expands.update(list(stem_2_tokens[stem]))
-    # # generate new query
-    # for token in query:
-    #     query_expands.discard(token)
-    query.extend(query_expands_stem) # earlier query.extend(list(query_expands))
-    query = ' '.join(set(query))
+
+    query.extend(query_expands_stem) 
+    query = ' '.join(list(set(query)))
 
     return query
 
