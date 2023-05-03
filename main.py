@@ -77,7 +77,7 @@ def index():
             if btn == "Flat Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-                solr_results = get_results_from_solr(solr_query_format, 10)
+                solr_results = get_results_from_solr(solr_query_format, 50)
                 parse_results = parse_solr_results(solr_results)
                 Cluster_Results = get_clustering_results(parse_results, btn, inner_data)
                 print(Cluster_Results)
@@ -85,7 +85,7 @@ def index():
             if btn == "Single-link Agglomerative Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-                solr_results = get_results_from_solr(solr_query_format, 10)
+                solr_results = get_results_from_solr(solr_query_format, 20)
                 parse_results = parse_solr_results(solr_results)
                 Cluster_Results = get_clustering_results(parse_results, btn, inner_data)
                 print(Cluster_Results)
@@ -93,7 +93,7 @@ def index():
             if btn == "Complete-link Agglomerative Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-                solr_results = get_results_from_solr(solr_query_format, 10)
+                solr_results = get_results_from_solr(solr_query_format, 20)
                 parse_results = parse_solr_results(solr_results)
                 Cluster_Results = get_clustering_results(parse_results, btn, inner_data)
                 print(Cluster_Results)
@@ -101,7 +101,7 @@ def index():
             if btn == "Association Clustering":
                 print("Button pressed: ", btn)
                 print('Query entered: ', inner_data)
-                solr_results = get_results_from_solr(solr_query_format, 10)
+                solr_results = get_results_from_solr(solr_query_format, 20)
                 documents = get_documents(solr_results)
                 expanded_query = association_main(inner_data, documents)
                 print("Expanded Query : ", expanded_query)

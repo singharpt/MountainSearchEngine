@@ -98,11 +98,11 @@ def process_query(clust_inp, query):
     for curr_resp in clust_inp:
         url_list.append(curr_resp["url"])
         document_list.append(curr_resp["meta_info"])
-      
+    print("Document list is of length", len(document_list))
     vectorizer = TfidfVectorizer(min_df=0.0, stop_words='english', use_idf=True)
     X = vectorizer.fit_transform(document_list)
 
-    km = KMeans(n_clusters = 3, init='k-means++')
+    km = KMeans(n_clusters = 50, init='k-means++')
     km.fit(X)
 
     id_series = pd.Series(url_list)
@@ -115,14 +115,14 @@ def process_query(clust_inp, query):
     query_vector = vectorizer.transform([query])
     print(query_vector)
     # predict the cluster label for the vectorized query
-    query_cluster = km.predict(query_vector)[0]
-
+    # query_cluster = km.predict(query_vector)[0]
+    # print("Predicted query_cluster is:", query_cluster)
     # get the centroid vectors for each cluster
     centroid_vectors = km.cluster_centers_
 
     # compute the cosine similarity between the vectorized query and each centroid vector
     similarities = cosine_similarity(query_vector, centroid_vectors)
-
+    # print("Length of similarities is:", similarities[0])
     # get the cluster with the highest similarity score
     closest_cluster = np.argmax(similarities)
 
