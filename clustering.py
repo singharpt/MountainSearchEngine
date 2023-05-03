@@ -8,10 +8,10 @@ import pandas as pd
 
 
 def get_clustering_results(clust_inp, param_type, inner_data):
-    # fetched_url = process_query(clust_inp, inner_data)
+    fetched_url = process_query(clust_inp, inner_data)
     global lines
     if param_type == "Flat Clustering":
-        fetched_url = process_query(clust_inp, inner_data)
+        # fetched_url = process_query(clust_inp, inner_data)
         f = open('clustering_data/flat_clustering.txt')
         lines = f.readlines()
         f.close()
@@ -47,28 +47,28 @@ def get_clustering_results(clust_inp, param_type, inner_data):
 
     clust_resp = []
     curr_rank = 1
-    if param_type == "Flat Clustering":
-        fetched_cluster = cluster_map[fetched_url]
-        # if(fetched_cluster == "\n"):
-            # fetched_cluster = "31.0"
-        print("Fetched Cluster is",fetched_cluster)
-        for curr_resp in clust_inp:
-            # print("Current_resp cluster is", curr_resp["cluster"])
-            if  curr_resp["done"] == "False" and curr_resp["cluster"] == fetched_cluster:
-                clust = fetched_cluster
-                curr_resp.update({"done": "True"})
-                curr_resp.update({"rank": str(curr_rank)})
-                curr_rank += 1
-                clust_resp.append({"title": curr_resp["title"], "url": curr_resp["url"],
-                                "meta_info": curr_resp["meta_info"], "rank": curr_resp["rank"], "cluster" : clust})
-                for remaining_resp in clust_inp:
-                    if remaining_resp["done"] == "False":
-                        if remaining_resp["cluster"] == fetched_cluster:
-                            remaining_resp.update({"done": "True"})
-                            remaining_resp.update({"rank": str(curr_rank)})
-                            curr_rank += 1
-                            clust_resp.append({"title": remaining_resp["title"], "url": remaining_resp["url"],
-                                            "meta_info": remaining_resp["meta_info"], "rank": remaining_resp["rank"], "cluster" : clust})
+    
+    fetched_cluster = cluster_map[fetched_url]
+    # if(fetched_cluster == "\n"):
+        # fetched_cluster = "31.0"
+    print("Fetched Cluster is",fetched_cluster)
+    for curr_resp in clust_inp:
+        # print("Current_resp cluster is", curr_resp["cluster"])
+        if  curr_resp["done"] == "False" and curr_resp["cluster"] == fetched_cluster:
+            clust = fetched_cluster
+            curr_resp.update({"done": "True"})
+            curr_resp.update({"rank": str(curr_rank)})
+            curr_rank += 1
+            clust_resp.append({"title": curr_resp["title"], "url": curr_resp["url"],
+                            "meta_info": curr_resp["meta_info"], "rank": curr_resp["rank"], "cluster" : clust})
+            for remaining_resp in clust_inp:
+                if remaining_resp["done"] == "False":
+                    if remaining_resp["cluster"] == fetched_cluster:
+                        remaining_resp.update({"done": "True"})
+                        remaining_resp.update({"rank": str(curr_rank)})
+                        curr_rank += 1
+                        clust_resp.append({"title": remaining_resp["title"], "url": remaining_resp["url"],
+                                        "meta_info": remaining_resp["meta_info"], "rank": remaining_resp["rank"], "cluster" : clust})
 
     for curr_resp in clust_inp:
         if curr_resp["done"] == "False":
